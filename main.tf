@@ -22,10 +22,10 @@ provider "azurerm" {
   # If you're using version 1.x, the "features" block is not allowed.
   version = "~>2.0"
   
-  subscription_id = var.ARM_SUBSCRIPTION_ID
-  client_id       = var.ARM_CLIENT_ID
-  client_secret   = var.ARM_CLIENT_SECRET
-  tenant_id       = var.ARM_TENANT_ID
+  subscription_id = "672d65d0-5bbd-49dc-a108-283e922656d4"
+  client_id       = "672d65d0-5bbd-49dc-a108-283e922656d4"
+  client_secret   = "tQEV2q364_-6uJ4zWOc1eIIRPbdJPqU~o1"
+  tenant_id       = "a640d7fb-2b68-4c6e-90a2-64b2aa3d80e6"
   
   features {}
 }
