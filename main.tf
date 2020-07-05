@@ -147,7 +147,6 @@ resource "tls_private_key" "example_ssh" {
   algorithm = "RSA"
   rsa_bits  = 4096
 }
-output "tls_private_key" { value = "${tls_private_key.example_ssh.private_key_pem}" }
 
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
@@ -191,8 +190,4 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 data "azurerm_public_ip" "myterraformpublicip" {
   name                = azurerm_public_ip.myterraformpublicip.name
   resource_group_name = azurerm_linux_virtual_machine.myterraformvm.resource_group_name
-}
-
-output "public_ip_address" {
-  value = data.azurerm_public_ip.myterraformpublicip.ip_address
 }
