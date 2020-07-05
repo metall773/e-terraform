@@ -72,10 +72,6 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   }
 }
 
-output "azurerm_public_ip" {
-  value = "${azurerm_public_ip.myterraformpublicip.*.ip_address}"
-}
-
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "myterraformnsg" {
   name                = "myNetworkSecurityGroup"
@@ -190,4 +186,13 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   tags = {
     environment = "Terraform Demo"
   }
+}
+
+data "azurerm_public_ip" "myterraformpublicip" {
+  name                = azurerm_public_ip.myterraformpublicip.name
+  resource_group_name = azurerm_virtual_machine.myterraformvm.resource_group_name
+}
+
+output "public_ip_address" {
+  value = data.azurerm_public_ip.myterraformpublicip.ip_address
 }
