@@ -190,7 +190,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
 
 data "azurerm_public_ip" "myterraformpublicip" {
   name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = azurerm_virtual_machine.myterraformvm.resource_group_name
+  resource_group_name = azurerm_linux_virtual_machine.myterraformvm.resource_group_name
 }
 
 output "public_ip_address" {
