@@ -4,7 +4,7 @@ terraform {
         resource_group_name   = "terraform-state"
         storage_account_name  = "4terraform2state"
         container_name        = "tstate"
-        key                   = "${var.environment}-terraform.tfstate"
+        key                   = "dev-terraform.tfstate"
     }
 }
 
