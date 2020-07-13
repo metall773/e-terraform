@@ -1,29 +1,35 @@
+locals {
+  vm_name = "${var.environment}-${var.prefix}-vm"
+}
+
 # Create a resource group if it doesn't exist
 resource "azurerm_resource_group" "myterraformgroup" {
   name     = "myResourceGroup"
-  location = "germanywestcentral"
+  location = var.location
 
   tags = {
-    environment = "Terraform Demo"
+        application = var.app_name
+        environment = var.environment
   }
 }
 
 # Create public IPs
 resource "azurerm_public_ip" "myterraformpublicip" {
   name                = "myPublicIP"
-  location            = "germanywestcentral"
+  location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
   allocation_method   = "Dynamic"
 
   tags = {
-    environment = "Terraform Demo"
+        application = var.app_name
+        environment = var.environment
   }
 }
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "myterraformnsg" {
   name                = "myNetworkSecurityGroup"
-  location            = "germanywestcentral"
+  location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
 
   security_rule {
@@ -39,14 +45,15 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   }
 
   tags = {
-    environment = "Terraform Demo"
+        application = var.app_name
+        environment = var.environment
   }
 }
 
 # Create network interface
 resource "azurerm_network_interface" "myterraformnic" {
-    name                = "myNIC"
-    location            = "germanywestcentral"
+    name                = "${local.vm_name}-NIC"
+    location            = azurerm_resource_group.myterraformgroup.name.location
     resource_group_name = azurerm_resource_group.myterraformgroup.name
 
     ip_configuration {
@@ -57,7 +64,8 @@ resource "azurerm_network_interface" "myterraformnic" {
     }
 
     tags = {
-        environment = "Terraform Demo"
+        application = var.app_name
+        environment = var.environment
     }
 }
 
@@ -81,12 +89,13 @@ resource "random_id" "randomId" {
 resource "azurerm_storage_account" "mystorageaccount" {
   name                     = "diag${random_id.randomId.hex}"
   resource_group_name      = azurerm_resource_group.myterraformgroup.name
-  location                 = "germanywestcentral"
+  location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
 
   tags = {
-    environment = "Terraform Demo"
+        application = var.app_name
+        environment = var.environment
   }
 }
 
@@ -96,33 +105,55 @@ resource "tls_private_key" "example_ssh" {
   rsa_bits  = 4096
 }
 
+# Data template Bash bootstrapping file
+data "template_file" "linux-vm-cloud-init" {
+  template = file("azure-centos-user-data.sh")
+}
+
+resource "azurerm_managed_disk" "managed_disk" {
+  name                 = "${local.vm_name}-managed-data-disk"
+  location             = azurerm_resource_group.myterraformgroup.name.location
+  resource_group_name  = azurerm_resource_group.myterraformgroup.name
+  storage_account_type = var.storage_account_type
+  create_option        = "Empty"
+  disk_size_gb         = var.managed_disk_size_gb
+}
+
+resource "azurerm_virtual_machine_data_disk_attachment" "managed_disk" {
+  virtual_machine_id = azurerm_linux_virtual_machine.myterraformvm.id
+  managed_disk_id    = azurerm_managed_disk.managed_disk.id
+  lun                = 1
+  caching            = "None"
+}
+
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
-  name                  = "Lee-VM"
-  location              = "germanywestcentral"
+  name                  = local.vm_name
+  location              = var.location
   resource_group_name   = azurerm_resource_group.myterraformgroup.name
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
-  size                  = "Standard_B1ls"
+  size                  = var.web-linux-vm-size
 
   os_disk {
     name                 = "myOsDisk"
     caching              = "ReadWrite"
-    storage_account_type = "Premium_LRS"
+    storage_account_type = var.storage_account_type
   }
 
   source_image_reference {
-    publisher = "OpenLogic"
-    offer     = "CentOS"
-    sku       = "7_8"
-    version   = "latest"
+    offer     = lookup(var.web-linux-vm-image, "offer", null)
+    publisher = lookup(var.web-linux-vm-image, "publisher", null)
+    sku       = lookup(var.web-linux-vm-image, "sku", null)
+    version   = lookup(var.web-linux-vm-image, "version", null)
   }
 
   computer_name                   = "myvm"
-  admin_username                  = "azureuser"
+  admin_username                  = var.web-linux-admin-username
   disable_password_authentication = true
+  custom_data                     = base64encode(data.template_file.linux-vm-cloud-init.rendered)
 
   admin_ssh_key {
-    username   = "azureuser"
+    username   = var.web-linux-admin-username
     public_key = tls_private_key.example_ssh.public_key_openssh
   }
 
@@ -130,9 +161,11 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
   }
 
-  tags = {
-    environment = "Terraform Demo"
-  }
+    tags = {
+        application = var.app_name
+        environment = var.environment
+        #name        = azurerm_linux_virtual_machine.myterraformvm.computer_name
+    }
 }
 
 data "azurerm_public_ip" "myterraformpublicip" {
