@@ -45,20 +45,20 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 
 # Create network interface
 resource "azurerm_network_interface" "myterraformnic" {
-  name                = "myNIC"
-  location            = "germanywestcentral"
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+    name                = "myNIC"
+    location            = "germanywestcentral"
+    resource_group_name = azurerm_resource_group.myterraformgroup.name
 
-  ip_configuration {
-    name                          = "myNicConfiguration"
-    subnet_id                     = azurerm_subnet.network-vnet.id
-    private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
-  }
+    ip_configuration {
+        name                          = "myNicConfiguration"
+        subnet_id                     = azurerm_subnet.network-subnet.id
+        private_ip_address_allocation = "Dynamic"
+        public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
+    }
 
-  tags = {
-    environment = "Terraform Demo"
-  }
+    tags = {
+        environment = "Terraform Demo"
+    }
 }
 
 # Connect the security group to the network interface

@@ -5,7 +5,7 @@ variable "network-vnet-cidr" {
 }
 
 variable "network-subnet-cidr" {
-    type        = string
+    type        = list
     description = "The CIDR for the network subnet"
-    default     = "10.0.1.0/24"
+    default     = ["10.0.1.0/24"]
 }

@@ -9,7 +9,7 @@ variable "company" {
 variable "app_name" {
     type        = string
     description = "The application name used to build resources"
-    default     = "e-tiketka app"
+    default     = "e-tiketka-app"
 }
 
 # environment
