@@ -1,10 +1,10 @@
 locals {
-  vm_name = "${var.environment}-${var.prefix}-vm"
+  vm_name = "${var.environment}-${var.web-linux-vm-prefix}-vm"
 }
 
 # Create a resource group if it doesn't exist
 resource "azurerm_resource_group" "myterraformgroup" {
-  name     = "myResourceGroup"
+  name     = "${local.vm_name}-ResourceGroup"
   location = var.location
 
   tags = {
@@ -15,7 +15,7 @@ resource "azurerm_resource_group" "myterraformgroup" {
 
 # Create public IPs
 resource "azurerm_public_ip" "myterraformpublicip" {
-  name                = "myPublicIP"
+  name                = "${local.vm_name}-PublicIP"
   location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
   allocation_method   = "Dynamic"
@@ -28,7 +28,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "myterraformnsg" {
-  name                = "myNetworkSecurityGroup"
+  name                = "${local.vm_name}-NetworkSecurityGroup"
   location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
 
@@ -53,11 +53,11 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 # Create network interface
 resource "azurerm_network_interface" "myterraformnic" {
     name                = "${local.vm_name}-NIC"
-    location            = azurerm_resource_group.myterraformgroup.name.location
+    location            = azurerm_resource_group.myterraformgroup.location
     resource_group_name = azurerm_resource_group.myterraformgroup.name
 
     ip_configuration {
-        name                          = "myNicConfiguration"
+        name                          = "${local.vm_name}-NicConfiguration"
         subnet_id                     = azurerm_subnet.network-subnet.id
         private_ip_address_allocation = "Dynamic"
         public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
@@ -110,18 +110,23 @@ data "template_file" "linux-vm-cloud-init" {
   template = file("azure-centos-user-data.sh")
 }
 
-resource "azurerm_managed_disk" "managed_disk" {
+resource "azurerm_managed_disk" "linux-vm-managed_disk" {
   name                 = "${local.vm_name}-managed-data-disk"
-  location             = azurerm_resource_group.myterraformgroup.name.location
+  location             = azurerm_resource_group.myterraformgroup.location
   resource_group_name  = azurerm_resource_group.myterraformgroup.name
   storage_account_type = var.storage_account_type
   create_option        = "Empty"
   disk_size_gb         = var.managed_disk_size_gb
+      tags = {
+        application = var.app_name
+        environment = var.environment
+        vm-name     = local.vm_name
+    }
 }
 
-resource "azurerm_virtual_machine_data_disk_attachment" "managed_disk" {
+resource "azurerm_virtual_machine_data_disk_attachment" "linux-vm-managed_disk" {
   virtual_machine_id = azurerm_linux_virtual_machine.myterraformvm.id
-  managed_disk_id    = azurerm_managed_disk.managed_disk.id
+  managed_disk_id    = azurerm_managed_disk.linux-vm-managed_disk.id
   lun                = 1
   caching            = "None"
 }
@@ -135,7 +140,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
   size                  = var.web-linux-vm-size
 
   os_disk {
-    name                 = "myOsDisk"
+    name                 = "${local.vm_name}-OsDisk"
     caching              = "ReadWrite"
     storage_account_type = var.storage_account_type
   }
@@ -147,7 +152,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     version   = lookup(var.web-linux-vm-image, "version", null)
   }
 
-  computer_name                   = "myvm"
+  computer_name                   = local.vm_name
   admin_username                  = var.web-linux-admin-username
   disable_password_authentication = true
   custom_data                     = base64encode(data.template_file.linux-vm-cloud-init.rendered)
@@ -164,7 +169,7 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
     tags = {
         application = var.app_name
         environment = var.environment
-        #name        = azurerm_linux_virtual_machine.myterraformvm.computer_name
+        name        = local.vm_name
     }
 }
 
