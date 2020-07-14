@@ -10,6 +10,7 @@ resource "azurerm_resource_group" "myterraformgroup" {
   tags = {
         application = var.app_name
         environment = var.environment
+        vm-name     = local.vm_name
   }
 }
 
@@ -23,6 +24,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   tags = {
         application = var.app_name
         environment = var.environment
+        vm-name     = local.vm_name
   }
 }
 
@@ -47,6 +49,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   tags = {
         application = var.app_name
         environment = var.environment
+        vm-name     = local.vm_name
   }
 }
 
@@ -66,6 +69,7 @@ resource "azurerm_network_interface" "myterraformnic" {
     tags = {
         application = var.app_name
         environment = var.environment
+        vm-name     = local.vm_name
     }
 }
 
@@ -96,6 +100,7 @@ resource "azurerm_storage_account" "mystorageaccount" {
   tags = {
         application = var.app_name
         environment = var.environment
+        vm-name     = local.vm_name
   }
 }
 
