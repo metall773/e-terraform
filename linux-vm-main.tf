@@ -178,8 +178,3 @@ resource "azurerm_linux_virtual_machine" "myterraformvm" {
         name        = local.vm_name
     }
 }
-
-data "azurerm_public_ip" "myterraformpublicip" {
-  name                = azurerm_public_ip.myterraformpublicip.name
-  resource_group_name = azurerm_linux_virtual_machine.myterraformvm.resource_group_name
-}
