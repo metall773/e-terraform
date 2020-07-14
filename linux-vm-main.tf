@@ -20,6 +20,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
   allocation_method   = "Dynamic"
+  fqdn                = local.vm_name
 
   tags = {
         application = var.app_name
