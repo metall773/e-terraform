@@ -7,8 +7,8 @@ output "public_ip_address" {
     value = data.azurerm_public_ip.myterraformpublicip.ip_address
 }
 
-output "domain_name_label" {
-    value = data.azurerm_public_ip.myterraformpublicip.domain_name_label
+output "fqdn" {
+    value = data.azurerm_public_ip.myterraformpublicip.fqdn
 }
 
 output "username" { 
