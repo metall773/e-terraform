@@ -121,6 +121,7 @@ resource "azurerm_managed_disk" "linux-vm-managed_disk" {
   resource_group_name  = azurerm_resource_group.myterraformgroup.name
   storage_account_type = var.storage_account_type
   create_option        = "Empty"
+  os_type              = "Linux"
   disk_size_gb         = var.managed_disk_size_gb
       tags = {
         application = var.app_name
