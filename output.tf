@@ -12,17 +12,17 @@ output "fqdn" {
 }
 
 #bastion
-data "azurerm_public_ip" "bastionpublicip" {
-    name                = azurerm_public_ip.bastionpublicip.name
-    resource_group_name = azurerm_bastion_host.bastion.resource_group_name
+data "azurerm_public_ip" "bastion-public-ip" {
+    name                = azurerm_public_ip.bastion-public-ip.name
+    resource_group_name = azurerm_bastion_host.bastion-host.resource_group_name
 }
 
 output "public_ip_address_bastion" {
-    value = data.azurerm_public_ip.bastionpublicip.ip_address
+    value = data.azurerm_public_ip.bastion-public-ip.ip_address
 }
 
 output "fqdn_bastion" {
-    value = data.azurerm_public_ip.bastionpublicip.fqdn
+    value = data.azurerm_public_ip.bastion-public-ip.fqdn
 }
 
 

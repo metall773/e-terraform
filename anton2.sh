@@ -1,2 +1,0 @@
-echo $username1
-
