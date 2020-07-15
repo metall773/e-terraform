@@ -58,7 +58,7 @@ yum install -y \
     yum-cron
 yum clean -y all
 
-#Attaching data disk as LVM
+#Attaching data disk as LVM volume
 #  https://docs.microsoft.com/en-us/azure/virtual-machines/linux/configure-lvm
 pvcreate /dev/sdc
 vgcreate data-vg01 /dev/sdc
