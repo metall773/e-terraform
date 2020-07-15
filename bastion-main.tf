@@ -24,24 +24,12 @@ resource "azurerm_public_ip" "bastion-public-ip" {
     }
 }
 
-# Create Bastion network VNET
-resource "azurerm_virtual_network" "bastion-network-vnet" {
-    name                = "${local.bastion_name}-vnet"
-    address_space       = [var.batstion_vnet_cidr]
-    resource_group_name = azurerm_resource_group.bastion-ResourceGroup.name
-    location            = azurerm_resource_group.bastion-ResourceGroup.location
-    tags = {
-        application = var.app_name
-        environment = var.environment
-    }
-}
-
 # Create Bastion subnet for Network
 resource "azurerm_subnet" "azure-bastion-subnet" {
     name                 = "AzureBastionSubnet"
     address_prefixes     = [var.batstion_subnet_cidr]
-    virtual_network_name = azurerm_virtual_network.bastion-network-vnet.name
-    resource_group_name  = azurerm_resource_group.bastion-ResourceGroup.name
+    virtual_network_name = azurerm_virtual_network.network-vnet.name
+    resource_group_name  = azurerm_resource_group.network-rg.name
 }
 
 resource "azurerm_bastion_host" "bastion-host" {
@@ -50,7 +38,7 @@ resource "azurerm_bastion_host" "bastion-host" {
     resource_group_name = azurerm_resource_group.bastion-ResourceGroup.name
 
     ip_configuration {
-        name                 = "configuration"
+        name                 = "${local.bastion_name}-IP-configuration"
         subnet_id            = azurerm_subnet.azure-bastion-subnet.id
         public_ip_address_id = azurerm_public_ip.bastion-public-ip.id
     }

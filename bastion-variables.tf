@@ -5,12 +5,6 @@ variable "bastion_location" {
     default     = "north europe"
 }
 
-variable "batstion_vnet_cidr" {
-    type        = string
-    description = "The CIDR of the network VNET"
-    default     = "10.0.4.0/22"
-}
-
 variable "batstion_subnet_cidr" {
     type        = string
     description = "The CIDR for the network subnet"

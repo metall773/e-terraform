@@ -68,11 +68,21 @@ mkdir -p /home/bitrix
 echo "/dev/data-vg01/data-lv01  /home/bitrix  ext4  defaults  0  2" >>/etc/fstab
 mount -a
 
-#add and configure bitrix user
+#enable ssh access by keys
+git clone https://github.com/metall773/e-keys.git
+mkdir -p /home/bitrix/.ssh
+for n in `ls e-keys/*.pub`
+do 
+    cat $n >> /home/azureuser/.ssh/authorized_keys
+done
+
+#create and configure bitrix user
+useradd -ms /bin/bash bitrix
+usermod -aG wheel bitrix
+
 mkdir -p /home/bitrix/www
 wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O /home/bitrix/www/bitrixsetup.php
 
-useradd -ms /bin/bash bitrix
 mkdir -p /home/bitrix/.ssh
 cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
 chmod 600 /home/bitrix/.ssh/authorized_keys
@@ -80,6 +90,8 @@ chown -R bitrix:bitrix /home/bitrix
 chmod -R 777 /tmp
 mkdir -p /home/bitrix/www/bitrix/tmp
 chmod -R 777 /home/bitrix/www/bitrix/tmp
+#to restore bitrix home directory the default SElinux context
+restorecon -v -R /home/bitrix
 
 #set timezone
 ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime
