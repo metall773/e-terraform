@@ -11,7 +11,7 @@ resource "azurerm_subnet" "azurebastionsubnet" {
     name                 = "AzureBastionSubnet"
     resource_group_name  = azurerm_resource_group.bastion.name
     virtual_network_name = azurerm_virtual_network.network-vnet.name
-    address_prefix       = var.batstion_subnet_cidr
+    address_prefixes     = [var.batstion_subnet_cidr]
 }
 
 # Create public IPs
