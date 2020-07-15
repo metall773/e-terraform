@@ -1,6 +1,6 @@
 # Create a resource group for network
 resource "azurerm_resource_group" "network-rg" {
-    name     = "${var.app_name}-network-ResourceGroup"
+    name     = "${var.environment}-network-ResourceGroup"
     location = var.location
     tags = {
         application = var.app_name
