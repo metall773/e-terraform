@@ -13,5 +13,5 @@ variable "network-subnet-cidr" {
 variable "batstion_subnet_cidr" {
     type        = list
     description = "The CIDR for the network subnet"
-    default     = ["10.0.2.0/24"]
+    default     = "10.0.2.0/24"
 }
