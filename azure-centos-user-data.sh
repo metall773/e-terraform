@@ -90,6 +90,11 @@ chown -R bitrix:bitrix /home/bitrix
 chmod -R 777 /tmp
 mkdir -p /home/bitrix/www/bitrix/tmp
 chmod -R 777 /home/bitrix/www/bitrix/tmp
+#bitrix default setup
+#rm /etc/nginx/* -Rf
+#rm /etc/httpd/* -Rf
+
+
 #to restore bitrix home directory the default SElinux context
 restorecon -v -R /home/bitrix
 
@@ -107,3 +112,6 @@ systemctl start crond.service
 sed -i 's/apply_updates = no/apply_updates = yes/g' /etc/yum/yum-cron.conf
 systemctl enable yum-cron.service
 systemctl start  yum-cron.service
+
+systemctl restart nginx.service
+systemctl restart httpd.service
