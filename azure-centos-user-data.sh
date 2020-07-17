@@ -12,6 +12,7 @@ yum upgrade -y
 yum install -y \
     bash-completion \
     bind-utils \
+    cifs-utils \
     curl \
     cronie \
     ca-certificates \
@@ -66,6 +67,12 @@ lvcreate --extents 100%FREE --name data-lv01 data-vg01
 mkfs -t ext4 /dev/data-vg01/data-lv01
 mkdir -p /home/bitrix
 echo "/dev/data-vg01/data-lv01  /home/bitrix  ext4  defaults  0  2" >>/etc/fstab
+
+#mount azure storage account network share (cifs) 
+#https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mount-azure-file-storage-on-linux-using-smb#mount-the-share
+mkdir -p /mnt/${storage_account}/${share_name}
+mount -t cifs //${storage_account}/${share_name} /mnt/${storage_account}/${share_name} -o vers=3.0,dir_mode=0755,file_mode=0755,serverino,username=${storage_account},password=${share_pass}
+echo '//${storage_account}.file.core.windows.net/${share_name} /mnt/${storage_account}/${share_name} cifs vers=3.0,username=${storage_account},password=${share_pass},dir_mode=0777,file_mode=0777' >> /etc/fstab
 mount -a
 
 #enable ssh access by keys
@@ -90,6 +97,7 @@ chown -R bitrix:bitrix /home/bitrix
 chmod -R 777 /tmp
 mkdir -p /home/bitrix/www/bitrix/tmp
 chmod -R 777 /home/bitrix/www/bitrix/tmp
+chown -R bitrix:bitrix /mnt/${storage_account}/${share_name}
 #bitrix default setup
 #rm /etc/nginx/* -Rf
 #rm /etc/httpd/* -Rf

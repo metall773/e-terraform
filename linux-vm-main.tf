@@ -149,6 +149,37 @@ resource "azurerm_storage_account" "mystorageaccount" {
   }
 }
 
+# Create storage account for network share
+resource "azurerm_storage_account" "mystorageaccount-files" {
+  name                     = "files${random_id.randomId.hex}"
+  resource_group_name      = azurerm_resource_group.myterraformgroup.name
+  location                 = var.location
+  account_tier             = var.azurerm_storage_account_tier
+  account_replication_type = var.azurerm_account_replication_type
+
+  tags = {
+        application = var.app_name
+        environment = var.environment
+        vm-name     = local.vm_name
+  }
+}
+
+resource "azurerm_storage_share" "myfileshare" {
+  name                 = "${local.vm_name}-files-share"
+  storage_account_name = azurerm_storage_account.mystorageaccount-files.name
+  quota                = var.azurerm_storage_share_quota
+
+  acl {
+    id = "${random_id.randomId.hex}MTIzNDU2Nzg5MDEyMzQ1Njc4OTAxMjM0NTY3ODkwMTI"
+
+    access_policy {
+      permissions = "rwdl"
+      start       = "2019-07-02T09:38:21.0000000Z"
+      expiry      = "2019-07-02T10:38:21.0000000Z"
+    }
+  }
+}
+
 # Create (and display) an SSH key
 resource "tls_private_key" "example_ssh" {
   algorithm = "RSA"
@@ -158,8 +189,14 @@ resource "tls_private_key" "example_ssh" {
 # Data template Bash bootstrapping file
 data "template_file" "linux-vm-cloud-init" {
   template = file("azure-centos-user-data.sh")
+  vars = {
+    storage_account="${azurerm_storage_account.mystorageaccount-files.name}"
+    share_name="${azurerm_storage_share.myfileshare.name}"
+    share_pass="${azurerm_storage_account.mystorageaccount-files.primary_access_key}"
+  }
 }
 
+# /home/bitrix disk
 resource "azurerm_managed_disk" "linux-vm-managed_disk" {
   name                 = "${local.vm_name}-managed-data-disk"
   location             = azurerm_resource_group.myterraformgroup.location
