@@ -91,7 +91,10 @@ done
 #create and configure bitrix user
 useradd -ms /bin/bash bitrix
 usermod -aG wheel bitrix
+
 mkdir -p /home/bitrix/www
+wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O /home/bitrix/www/bitrixsetup.php
+
 mkdir -p /home/bitrix/.ssh
 cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
 chmod 600 /home/bitrix/.ssh/authorized_keys
@@ -102,7 +105,6 @@ chmod -R 777 /home/bitrix/www/bitrix/tmp
 #bitrix default setup
 #rm /etc/nginx/* -Rf
 #rm /etc/httpd/* -Rf
-#wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O /home/bitrix/www/bitrixsetup.php
 #need to restore bitrix home directory the default SElinux context
 restorecon -v -R /home/bitrix
 
@@ -126,6 +128,7 @@ maxretry = 5
 bantime = 3600
 EOF
 chmod +x /etc/fail2ban/jail.d/sshd.local
+#watch -n 2 -d fail2ban-client status sshd
 
 
 #configure services autostart

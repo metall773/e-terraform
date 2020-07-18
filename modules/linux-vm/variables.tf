@@ -42,7 +42,6 @@ variable "web-linux-admin-username" {
     default     = "azureuser"
 }
 
-
 variable "storage_account_type" {
     type        = string
     description = "The storage account type for the Managed Disk"
@@ -57,4 +56,23 @@ variable "managed_disk_size_gb" {
 
 variable "web-linux-vm-prefix" {
     default = "example"
+}
+
+variable "azurerm_storage_account_tier" {
+    type        = string
+    description = "Defines the Tier to use for this storage account."
+    default     = "Standard"
+}
+
+#https://docs.microsoft.com/en-us/azure/storage/common/storage-redundancy#redundancy-in-the-primary-region
+variable "azurerm_account_replication_type" {
+    type        = string
+    description = "Data in an Azure Storage account is always replicated three times in the primary region."
+    default     = "LRS"
+}
+
+variable "azurerm_storage_share_quota" {
+    type        = string
+    description = "The maximum size of the share, in gigabytes."
+    default     = "50"
 }
