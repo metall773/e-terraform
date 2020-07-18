@@ -190,9 +190,15 @@ resource "tls_private_key" "example_ssh" {
 data "template_file" "linux-vm-cloud-init" {
   template = file("azure-centos-user-data.sh")
   vars = {
+<<<<<<< HEAD:modules/linux-vm/main.tf
     storage_account= "${azurerm_storage_account.mystorageaccount-files.name}"
     share_pass     = "${azurerm_storage_account.mystorageaccount-files.primary_access_key}"
     share_name     = "${azurerm_storage_share.myfileshare.name}"
+=======
+    storage_account="${azurerm_storage_account.mystorageaccount-files.name}"
+    share_name="${azurerm_storage_share.myfileshare.name}"
+    share_pass="${azurerm_storage_account.mystorageaccount-files.primary_access_key}"
+>>>>>>> 02ad45269351ab4d8c19e383b6041b2ce725b471:linux-vm-main.tf
   }
 }
 
