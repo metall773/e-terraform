@@ -105,7 +105,7 @@ resource "azurerm_network_interface" "myterraformnic" {
 
     ip_configuration {
         name                          = "${local.vm_name}-NicConfiguration"
-        subnet_id                     = azurerm_subnet.network-subnet.id
+        subnet_id                     = var.network-subnet
         private_ip_address_allocation = "Dynamic"
         public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
     }

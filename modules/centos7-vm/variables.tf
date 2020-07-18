@@ -1,3 +1,22 @@
+# environment
+variable "environment" {
+    type        = string
+    description = "The environment to be built"
+    default     = "dev"
+}
+
+# azure vm region
+variable "location" {
+    type        = string
+    description = "Azure region where the resources will be created"
+    default     = "north europe" # "germanywestcentral"
+}
+
+# application name 
+variable "app_name" {
+    type        = string
+}
+
 # Azure virtual machine settings #
 variable "web-linux-vm-size" {
     type        = string
@@ -75,4 +94,8 @@ variable "azurerm_storage_share_quota" {
     type        = string
     description = "The maximum size of the share, in gigabytes."
     default     = "50"
+}
+
+variable "network-subnet" {
+    type        = string
 }
