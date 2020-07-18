@@ -13,12 +13,6 @@ network-vnet-cidr = "10.0.0.0/22" #10.0.0.0 - 10.0.3.255
 network-subnet-cidr = ["10.0.1.0/24"]
 
 #bastion variables
-<<<<<<< HEAD
 #batstion_subnet_cidr = "10.0.2.0/24"
 # posible locations listed here https://docs.microsoft.com/en-us/azure/bastion/bastion-overview#faq
 #bastion_location = "north europe"
-=======
-batstion_subnet_cidr = "10.0.2.0/24"
-# posible locations listed here https://docs.microsoft.com/en-us/azure/bastion/bastion-overview#faq
-bastion_location = "north europe"
->>>>>>> 02ad45269351ab4d8c19e383b6041b2ce725b471
