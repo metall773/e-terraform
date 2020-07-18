@@ -54,8 +54,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   }
 }
 
-
-resource "azurerm_network_security_rule" "allow_HTTP_rule" {
+resource "azurerm_network_security_rule" "allow_80_rule" {
   name                        = "allow_HTTP"
   priority                    = 100
   direction                   = "Inbound"
@@ -69,7 +68,7 @@ resource "azurerm_network_security_rule" "allow_HTTP_rule" {
   network_security_group_name = azurerm_network_security_group.myterraformnsg.name
 }
 
-resource "azurerm_network_security_rule" "allow_HTTPS_rule" {
+resource "azurerm_network_security_rule" "allow_443_rule" {
   name                        = "allow_HTTPS"
   priority                    = 101
   direction                   = "Inbound"
@@ -83,7 +82,7 @@ resource "azurerm_network_security_rule" "allow_HTTPS_rule" {
   network_security_group_name = azurerm_network_security_group.myterraformnsg.name
 }
 
-resource "azurerm_network_security_rule" "allow_HTTPS8443_rule" {
+resource "azurerm_network_security_rule" "allow_8443_rule" {
   name                        = "allow_HTTPS"
   priority                    = 101
   direction                   = "Inbound"
@@ -186,15 +185,7 @@ resource "tls_private_key" "example_ssh" {
   rsa_bits  = 4096
 }
 
-# Data template Bash bootstrapping file
-data "template_file" "linux-vm-cloud-init" {
-  template = file("azure-centos-user-data.sh")
-  vars = {
-    storage_account="${azurerm_storage_account.mystorageaccount-files.name}"
-    share_name="${azurerm_storage_share.myfileshare.name}"
-    share_pass="${azurerm_storage_account.mystorageaccount-files.primary_access_key}"
-  }
-}
+
 
 # /home/bitrix disk
 resource "azurerm_managed_disk" "linux-vm-managed_disk" {

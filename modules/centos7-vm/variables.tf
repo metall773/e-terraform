@@ -42,7 +42,6 @@ variable "web-linux-admin-username" {
     default     = "azureuser"
 }
 
-
 variable "storage_account_type" {
     type        = string
     description = "The storage account type for the Managed Disk"
