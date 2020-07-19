@@ -4,18 +4,6 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
 
-  security_rule {
-    name                       = "${local.vm_name}-SSH"
-    priority                   = 1001
-    direction                  = "Inbound"
-    access                     = "Allow"
-    protocol                   = "Tcp"
-    source_port_range          = "*"
-    destination_port_range     = "22"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
-
   tags = {
         application = var.app_name
         environment = var.environment
@@ -23,44 +11,32 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   }
 }
 
-resource "azurerm_network_security_rule" "allow_tcp_80_rule" {
-  name                        = "${local.vm_name}-allow_HTTP"
-  priority                    = 1000
+resource "azurerm_network_security_rule" "inbound_tcp_rules" {
+  count                       = length(var.firewall_tcp_ports)
+  name                        = "sg-rule-tcp-${element(var.firewall_tcp_ports, count.index)}"
   direction                   = "Inbound"
   access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "80"
+  priority                    = 101 + 10 * count.index
   source_address_prefix       = "*"
+  source_port_range           = "*"
   destination_address_prefix  = "*"
+  destination_port_range      = element(var.firewall_tcp_ports, count.index)
+  protocol                    = "TCP"
   resource_group_name         = azurerm_resource_group.myterraformgroup.name
   network_security_group_name = azurerm_network_security_group.myterraformnsg.name
 }
 
-resource "azurerm_network_security_rule" "allow_tcp_443_rule" {
-  name                        = "${local.vm_name}-allow_HTTPS"
-  priority                    = 1001
+resource "azurerm_network_security_rule" "inbound_udp_rules" {
+  count                       = length(var.firewall_udp_ports)
+  name                        = "sg-rule-udp-${element(var.firewall_udp_ports, count.index)}"
   direction                   = "Inbound"
   access                      = "Allow"
-  protocol                    = "Tcp"
-  source_port_range           = "*"
-  destination_port_range      = "443"
+  priority                    = 202 +  10 * count.index
   source_address_prefix       = "*"
-  destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.myterraformgroup.name
-  network_security_group_name = azurerm_network_security_group.myterraformnsg.name
-}
-
-resource "azurerm_network_security_rule" "allow_tcp_8443_rule" {
-  name                        = "${local.vm_name}-allow_HTTPS_8443"
-  priority                    = 1002
-  direction                   = "Inbound"
-  access                      = "Allow"
-  protocol                    = "Tcp"
   source_port_range           = "*"
-  destination_port_range      = "8443"
-  source_address_prefix       = "*"
   destination_address_prefix  = "*"
+  destination_port_range      = element(var.firewall_udp_ports, count.index)
+  protocol                    = "UDP"
   resource_group_name         = azurerm_resource_group.myterraformgroup.name
   network_security_group_name = azurerm_network_security_group.myterraformnsg.name
 }

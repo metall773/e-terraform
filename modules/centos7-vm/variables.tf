@@ -99,3 +99,33 @@ variable "azurerm_storage_share_quota" {
 variable "network-subnet" {
     type        = string
 }
+
+variable "install_bitrix" {
+    type        = string
+    description = "Install bitrix by cloud-init"
+    default     = "yes"
+}
+
+variable "install_autoupdate" {
+    type        = string
+    description = "Install autoupdate by cloud-init"
+    default     = "yes"
+}
+
+variable "install_fail2ban" {
+    type        = string
+    description = "Install fail2ban by cloud-init"
+    default     = "yes"
+}
+
+variable "firewall_tcp_ports" {
+    type        = list
+    description = "list ports to allow incoming tcp connections by cloud-init"
+    default     = [22]
+}
+
+variable "firewall_udp_ports" {
+    type        = list
+    description = "list ports to allow incoming udp connections by cloud-init"
+    default     = []
+}

@@ -21,4 +21,6 @@ module "centos7-vm2" {
     environment                      = "${var.environment}"
     web-linux-vm-prefix              = "test2"
     network-subnet                   = azurerm_subnet.network-subnet.id
+    firewall_tcp_ports               = [22, 80, 443]
+    firewall_udp_ports               = [53, 1002, 2005]
 }
