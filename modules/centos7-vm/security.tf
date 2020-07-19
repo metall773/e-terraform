@@ -5,7 +5,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   resource_group_name = azurerm_resource_group.myterraformgroup.name
 
   security_rule {
-    name                       = "SSH"
+    name                       = "${local.vm_name}-SSH"
     priority                   = 1001
     direction                  = "Inbound"
     access                     = "Allow"
@@ -24,7 +24,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 }
 
 resource "azurerm_network_security_rule" "allow_tcp_80_rule" {
-  name                        = "allow_HTTP"
+  name                        = "${local.vm_name}-allow_HTTP"
   priority                    = 100
   direction                   = "Inbound"
   access                      = "Allow"
@@ -38,7 +38,7 @@ resource "azurerm_network_security_rule" "allow_tcp_80_rule" {
 }
 
 resource "azurerm_network_security_rule" "allow_tcp_443_rule" {
-  name                        = "allow_HTTPS"
+  name                        = "${local.vm_name}-allow_HTTPS"
   priority                    = 101
   direction                   = "Inbound"
   access                      = "Allow"
@@ -52,8 +52,8 @@ resource "azurerm_network_security_rule" "allow_tcp_443_rule" {
 }
 
 resource "azurerm_network_security_rule" "allow_tcp_8443_rule" {
-  name                        = "allow_HTTPS"
-  priority                    = 101
+  name                        = "${local.vm_name}-allow_HTTPS_8443"
+  priority                    = 102
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
