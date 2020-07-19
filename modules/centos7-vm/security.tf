@@ -25,7 +25,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 
 resource "azurerm_network_security_rule" "allow_tcp_80_rule" {
   name                        = "${local.vm_name}-allow_HTTP"
-  priority                    = 100
+  priority                    = 1000
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -39,7 +39,7 @@ resource "azurerm_network_security_rule" "allow_tcp_80_rule" {
 
 resource "azurerm_network_security_rule" "allow_tcp_443_rule" {
   name                        = "${local.vm_name}-allow_HTTPS"
-  priority                    = 101
+  priority                    = 1001
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"
@@ -53,7 +53,7 @@ resource "azurerm_network_security_rule" "allow_tcp_443_rule" {
 
 resource "azurerm_network_security_rule" "allow_tcp_8443_rule" {
   name                        = "${local.vm_name}-allow_HTTPS_8443"
-  priority                    = 102
+  priority                    = 1002
   direction                   = "Inbound"
   access                      = "Allow"
   protocol                    = "Tcp"

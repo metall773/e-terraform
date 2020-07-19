@@ -98,13 +98,20 @@ wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O /home/bitrix/ww
 mkdir -p /home/bitrix/.ssh
 cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
 chmod 600 /home/bitrix/.ssh/authorized_keys
-chown -R bitrix:bitrix /home/bitrix
 chmod -R 777 /tmp
 mkdir -p /home/bitrix/www/bitrix/tmp
 chmod -R 777 /home/bitrix/www/bitrix/tmp
+chown -R bitrix:bitrix /home/bitrix
 #bitrix default setup
-#rm /etc/nginx/* -Rf
-#rm /etc/httpd/* -Rf
+rm /etc/nginx/* -Rf
+rm /etc/httpd/* -Rf
+tar -C /etc/httpd/ -xvf e-keys/bitrix.7.4.3/httpd.tar.bz2
+tar -C /etc/nginx/ -xvf e-keys/bitrix.7.4.3/nginx.tar.bz2
+tar -C /home/bitrix/ -xvf e-keys/bitrix.7.4.3/bitrix.tar.bz2
+tar -C /root/ -xvf e-keys/bitrix.7.4.3/root.tar.bz2
+mkdir -p /opt/webdir/
+tar -C /opt/webdir/ -xvf e-keys/bitrix.7.4.3/webdir.tar.bz2
+
 #need to restore bitrix home directory the default SElinux context
 restorecon -v -R /home/bitrix
 
