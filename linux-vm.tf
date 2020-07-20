@@ -24,4 +24,5 @@ module "centos7-vm2" {
     firewall_tcp_ports               = [22, 80, 443]
     firewall_udp_ports               = [53, 1002, 2005]
     install_bitrix                   = "no"
+    web-linux-admin-username         = "lee"
 }
