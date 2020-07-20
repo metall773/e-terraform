@@ -73,6 +73,12 @@ variable "managed_disk_size_gb" {
     default     = "5"
 }
 
+variable "managed_disk_mount_point" {
+    type        = string
+    description = "path for mount managed disk"
+    default     = "/home/bitrix"
+}
+
 variable "web-linux-vm-prefix" {
     default = "example"
 }

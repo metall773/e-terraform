@@ -25,4 +25,5 @@ module "centos7-vm2" {
     firewall_udp_ports               = [53, 1002, 2005]
     install_bitrix                   = "no"
     web-linux-admin-username         = "lee"
+    managed_disk_mount_point         = "/mnt/data"
 }
