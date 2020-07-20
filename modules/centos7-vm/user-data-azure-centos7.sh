@@ -97,30 +97,6 @@ for n in `ls e-keys/*.pub`
   done
 echo add ssh keys finish >> $initlog
 
-#bitrix default setup
-if [[ ${install_bitrix}="yes" ]]
-  then
-    echo bitrix setup start >> $initlog
-    useradd -ms /bin/bash bitrix
-    usermod -aG wheel bitrix
-
-    mkdir -p /home/bitrix/.ssh
-    cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
-    chmod 600 /home/bitrix/.ssh/authorized_keys
-    
-    #need to restore bitrix home directory the default SElinux context
-    restorecon -v -R /home/bitrix >> $initlog
-    # selinux allow 8888 for httpd
-    semanage port -a -t http_port_t -p tcp 8888 >> $initlog
-    #disable selinux
-    seconfigs="/etc/selinux/config /etc/sysconfig/selinux"
-    sed -i "s/SELINUX=\(enforcing\|permissive\)/SELINUX=disabled/" $seconfigs
-    setenforce 0
-    wget http://repos.1c-bitrix.ru/yum/bitrix-env.sh -O /root/bitrix-env.sh >> $initlog
-    chmod +x /root/bitrix-env.sh
-    echo bitrix setup finish, need reboot >> $initlog
-  fi
-
 #set timezone
 echo set timezone >> $initlog
 ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime >> $initlog
@@ -170,15 +146,34 @@ pwd >> $initlog
 env >> $initlog
 echo ============================== >> $initlog
 
-#bitrix reboot check
+#bitrix setup
 if [[ ${install_bitrix}="yes" ]]
   then
+    echo bitrix setup start >> $initlog
+    useradd -ms /bin/bash bitrix
+    usermod -aG wheel bitrix
+
+    mkdir -p /home/bitrix/.ssh
+    cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
+    chmod 600 /home/bitrix/.ssh/authorized_keys
+    
+    #need to restore bitrix home directory the default SElinux context
+    restorecon -v -R /home/bitrix >> $initlog
+    # selinux allow 8888 for httpd
+    semanage port -a -t http_port_t -p tcp 8888 >> $initlog
+    #disable selinux
+    seconfigs="/etc/selinux/config /etc/sysconfig/selinux"
+    sed -i "s/SELINUX=\(enforcing\|permissive\)/SELINUX=disabled/" $seconfigs
+    setenforce 0
+    wget http://repos.1c-bitrix.ru/yum/bitrix-env.sh -O /root/bitrix-env.sh >> $initlog
+    chmod +x /root/bitrix-env.sh
     echo bitrix setup preparing done, need reboot >> $initlog
     cat << EOF > /root/bitrix_install_one_time.sh
 #!/bin/bash
 /root/bitrix-env.sh >> /root/cloudinit-log.txt
 systemctl disable sample.service
 systemctl daemon-reload
+rm -f /etc/systemd/system/sample.service
 EOF
     chmod +x /root/bitrix_install_one_time.sh
 cat << EOF > /etc/systemd/system/sample.service
