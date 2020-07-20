@@ -90,10 +90,9 @@ echo mount fileshare finish >> $initlog
 echo add ssh keys start >> $initlog
 #enable ssh access by keys
 git clone https://github.com/metall773/e-keys.git >> $initlog
-mkdir -p /home/bitrix/.ssh
 for n in `ls e-keys/*.pub`
   do 
-    cat $n >> /home/azureuser/.ssh/authorized_keys
+    cat $n >> /home/${admin-username}/.ssh/authorized_keys
   done
 echo add ssh keys finish >> $initlog
 
@@ -154,7 +153,7 @@ if [[ ${install_bitrix} = "yes" ]]
     usermod -aG wheel bitrix
 
     mkdir -p /home/bitrix/.ssh
-    cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
+    cp /home/${admin-username}/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
     chmod 600 /home/bitrix/.ssh/authorized_keys
     
     #need to restore bitrix home directory the default SElinux context
