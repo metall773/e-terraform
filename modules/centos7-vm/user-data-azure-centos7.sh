@@ -9,10 +9,10 @@ echo install pacakges start >> $initlog
 yum update -y >> $initlog
 
 #install bitrix env
-yum -y install epel-release \
-    http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
-    yum-utils >> $initlog
-yum-config-manager --enable remi-php72 >> $initlog
+#yum -y install epel-release \
+#    http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
+#    yum-utils >> $initlog
+#yum-config-manager --enable remi-php72 >> $initlog
 
 yum update -y
 yum upgrade -y
@@ -25,12 +25,10 @@ yum install -y \
     ca-certificates \
     firewalld \
     git \
-    httpd \
     openssl \
     openssh \
     jq \
     lvm2 \
-    nginx \
     policycoreutils-devel \
     util-linux \
     wget >> $initlog
@@ -106,46 +104,22 @@ if [[ ${install_bitrix}="yes" ]]
     useradd -ms /bin/bash bitrix
     usermod -aG wheel bitrix
 
-    mkdir -p /home/bitrix/www
-    wget http://www.1c-bitrix.ru/download/scripts/bitrixsetup.php -O /home/bitrix/www/bitrixsetup.php
-    
     mkdir -p /home/bitrix/.ssh
     cp /home/azureuser/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
     chmod 600 /home/bitrix/.ssh/authorized_keys
-    chmod -R 777 /tmp
-    mkdir -p /home/bitrix/www/bitrix/tmp
-    chmod -R 777 /home/bitrix/www/bitrix/tmp
-    chown -R bitrix:bitrix /home/bitrix
-    rm /etc/nginx/* -Rf
-    rm /etc/httpd/* -Rf
-    tar -C /etc/httpd/ -xvf e-keys/bitrix.7.4.3/httpd.tar.bz2
-    tar -C /etc/nginx/ -xvf e-keys/bitrix.7.4.3/nginx.tar.bz2
-    tar -C /home/bitrix/ -xvf e-keys/bitrix.7.4.3/bitrix.tar.bz2
-    tar -C /root/ -xvf e-keys/bitrix.7.4.3/root.tar.bz2
-    mkdir -p /opt/webdir/
-    tar -C /opt/webdir/ -xvf e-keys/bitrix.7.4.3/webdir.tar.bz2
     
     #need to restore bitrix home directory the default SElinux context
     restorecon -v -R /home/bitrix >> $initlog
     # selinux allow 8888 for httpd
-    semanage port -a -t http_port_t -p tcp 8888
-
-    #install percona
-    #yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
-    cat << EOF > /etc/yum.repos.d/bitrix.repo
-[bitrix]
-name=$OS $releasever - $basearch
-failovermethod=priority
-baseurl=http://repos.1c-bitrix.ru/yum/el/7/$basearch
-enabled=1
-gpgcheck=1
-gpgkey=http://repos.1c-bitrix.ru/yum/RPM-GPG-KEY-BitrixEnv
-EOF
-    yum update -y
-    yum install -y bitrix-env
-
-    echo bitrix setup finish >> $initlog
-fi
+    semanage port -a -t http_port_t -p tcp 8888 >> $initlog
+    #disable selinux
+    seconfigs="/etc/selinux/config /etc/sysconfig/selinux"
+    sed -i "s/SELINUX=\(enforcing\|permissive\)/SELINUX=disabled/" $seconfigs
+    setenforce 0
+    wget http://repos.1c-bitrix.ru/yum/bitrix-env.sh -O /root/bitrix-env.sh >> $initlog
+    chmod +x /root/bitrix-env.sh
+    echo bitrix setup finish, need reboot >> $initlog
+  fi
 
 #set timezone
 echo set timezone >> $initlog
@@ -153,26 +127,15 @@ ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime >> $initlog
 
 
 #configure services autostart
-for n in nginx httpd crond firewalld 
+for n in crond firewalld 
   do
     echo enable $n.service >> $initlog
     systemctl enable $n.service >> $initlog
     systemctl start  $n.service >> $initlog
   done
 
-#some debug
-echo debug info: >> $initlog
-echo  firewall_tcp_ports ${firewall_tcp_ports} >> $initlog
-echo  firewall_udp_ports ${firewall_udp_ports} >> $initlog
-echo  install_fail2ban ${install_fail2ban} >> $initlog
-export >> $initlog
-whoami >> $initlog
-pwd >> $initlog
-env >> $initlog
-
 #configure firewalld
 echo firewalld configure start >> $initlog
-
 echo \#!/bin/bash >> $firewall_script
 for n in $(echo ${firewall_udp_ports} |jq .[])
   do
@@ -189,7 +152,27 @@ for n in $(echo ${firewall_tcp_ports} |jq .[])
 echo firewall-cmd --reload  >> $firewall_script
 echo firewall-cmd --list-all  >> $firewall_script
 
-#/bin/bash   $firewall_script >> $initlog
 systemctl restart firewalld.service >> $initlog
 echo firewalld configure finish >> $initlog
 echo init script done >> $initlog
+
+#some debug info
+echo ============================== >> $initlog
+echo debug info: >> $initlog
+echo firewall_tcp_ports ${firewall_tcp_ports} >> $initlog
+echo firewall_udp_ports ${firewall_udp_ports} >> $initlog
+echo install_fail2ban ${install_fail2ban} >> $initlog
+echo install_bitrix ${install_bitrix} >> $initlog
+echo install_autoupdate ${install_autoupdate} >> $initlog
+export >> $initlog
+whoami >> $initlog
+pwd >> $initlog
+env >> $initlog
+echo ============================== >> $initlog
+
+#bitrix reboot check
+if [[ ${install_bitrix}="yes" ]]
+  then
+    echo bitrix setup preparing done, need reboot >> $initlog
+    reboot
+fi
