@@ -2,9 +2,8 @@
 initlog=/root/cloudinit-log.txt
 firewall_script=/root/firewall_script.sh
 
-echo init start > $initlog
+echo init script start > $initlog
 echo init script path: $0 $_ >> $initlog
-cp $_ /myinitscrpt.sh
 
 echo install pacakges start >> $initlog
 yum update -y >> $initlog
@@ -32,38 +31,7 @@ yum install -y \
     jq \
     lvm2 \
     nginx \
-    php \
-    php-cli \
-    php-json \
-    php-iconv \
-    php-intl \
-    php-ftp \
-    php-xdebug \
-    php-mcrypt \
-    php-mbstring \
-    php-soap \
-    php-gmp \
-    php-pdo_odbc \
-    php-dom \
-    php-pdo \
-    php-zip \
-    php-mysqli \
-    php-bcmath \
-    php-gd \
-    php-odbc \
-    php-pdo_mysql \
-    php-gettext \
-    php-xmlreader \
-    php-xmlwriter \
-    php-tokenizer \
-    php-xmlrpc \
-    php-bz2 \
-    php-curl \
-    php-ctype \
-    php-session \
-    php-exif \
-    php-opcache \
-    php-ldap \
+    policycoreutils-devel \
     util-linux \
     wget >> $initlog
 echo install pacakges finish  >> $initlog
@@ -159,6 +127,23 @@ if [[ ${install_bitrix}="yes" ]]
     
     #need to restore bitrix home directory the default SElinux context
     restorecon -v -R /home/bitrix >> $initlog
+    # selinux allow 8888 for httpd
+    semanage port -a -t http_port_t -p tcp 8888
+
+    #install percona
+    #yum install -y https://repo.percona.com/yum/percona-release-latest.noarch.rpm
+    cat << EOF > /etc/yum.repos.d/bitrix.repo
+[bitrix]
+name=$OS $releasever - $basearch
+failovermethod=priority
+baseurl=http://repos.1c-bitrix.ru/yum/el/7/$basearch
+enabled=1
+gpgcheck=1
+gpgkey=http://repos.1c-bitrix.ru/yum/RPM-GPG-KEY-BitrixEnv
+EOF
+    yum update -y
+    yum install -y bitrix-env
+
     echo bitrix setup finish >> $initlog
 fi
 
@@ -188,22 +173,23 @@ env >> $initlog
 #configure firewalld
 echo firewalld configure start >> $initlog
 
-echo #!/bin/bash >> $firewall_script
+echo \#!/bin/bash >> $firewall_script
 for n in $(echo ${firewall_udp_ports} |jq .[])
   do
     echo firewalld add $n/udp  >> $initlog
-    echo /usr/bin/firewall-cmd --zone=public --add-port=$n/udp --permanent >> $firewall_script
+    echo firewall-cmd --zone=public --add-port=$n/udp --permanent >> $firewall_script
     firewall-offline-cmd --zone=public --add-port=$n/tcp >> $initlog
   done
 for n in $(echo ${firewall_tcp_ports} |jq .[])
   do
     echo firewalld add $n/tcp  >> $initlog
-    echo /usr/bin/firewall-cmd --zone=public --add-port=$n/tcp --permanent >> $firewall_script
+    echo firewall-cmd --zone=public --add-port=$n/tcp --permanent >> $firewall_script
     firewall-offline-cmd --zone=public --add-port=$n/tcp >> $initlog
   done
-echo  /usr/bin/firewall-cmd --reload  >> $firewall_script
-echo  /usr/bin/firewall-cmd --list-all  >> $firewall_script
+echo firewall-cmd --reload  >> $firewall_script
+echo firewall-cmd --list-all  >> $firewall_script
 
 #/bin/bash   $firewall_script >> $initlog
-systemctl restart  firewalld.service >> $initlog
+systemctl restart firewalld.service >> $initlog
 echo firewalld configure finish >> $initlog
+echo init script done >> $initlog
