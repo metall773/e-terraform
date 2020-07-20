@@ -36,7 +36,7 @@ echo install pacakges finish  >> $initlog
 
 
 #Enbale CentOS 7 autoupdate
-if [[ ${install_autoupdate}="yes" ]]
+if [[ ${install_autoupdate} = "yes" ]]
   then
     echo enable autoupdate start >> $initlog
     yum install -y yum-cron >> $initlog
@@ -48,7 +48,7 @@ fi
 
 
 #configure fail2ban for ssh
-if [[ ${install_fail2ban}="yes" ]]
+if [[ ${install_fail2ban} = "yes" ]]
   then
     echo enable fail2ban start >> $initlog
     yum install -y fail2ban fail2ban-systemd >> $initlog
@@ -147,7 +147,7 @@ env >> $initlog
 echo ============================== >> $initlog
 
 #bitrix setup
-if [[ ${install_bitrix}="yes" ]]
+if [[ ${install_bitrix} = "yes" ]]
   then
     echo bitrix setup start >> $initlog
     useradd -ms /bin/bash bitrix
