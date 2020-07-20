@@ -174,5 +174,27 @@ echo ============================== >> $initlog
 if [[ ${install_bitrix}="yes" ]]
   then
     echo bitrix setup preparing done, need reboot >> $initlog
-    reboot
+    cat << EOF > /root/bitrix_install_one_time.sh
+#!/bin/bash
+/root/bitrix-env.sh >> /root/cloudinit-log.txt
+systemctl disable sample.service
+systemctl daemon-reload
+EOF
+    chmod +x /root/bitrix_install_one_time.sh
+cat << EOF > /etc/systemd/system/sample.service
+[Unit]
+Description=Description for sample script goes here
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/root/bitrix_install_one_time.sh >> /root/cloudinit-log.txt
+TimeoutStartSec=0
+
+[Install]
+WantedBy=default.target
+EOF
+    systemctl daemon-reload
+    systemctl enable sample.service
+    systemctl reboot
 fi

@@ -20,7 +20,7 @@ module "centos7-vm2" {
     app_name                         = "${var.app_name}"
     environment                      = "${var.environment}"
     network-subnet                   = azurerm_subnet.network-subnet.id
-    web-linux-vm-prefix              = "test2"
+    web-linux-vm-prefix              = "mouse"
     firewall_tcp_ports               = [22, 80, 443]
     firewall_udp_ports               = [53, 1002, 2005]
     install_bitrix                   = "no"
