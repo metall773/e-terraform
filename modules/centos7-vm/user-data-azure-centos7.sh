@@ -8,11 +8,7 @@ echo init script path: $0 $_ >> $initlog
 echo install pacakges start >> $initlog
 yum update -y >> $initlog
 
-#install bitrix env
-#yum -y install epel-release \
-#    http://rpms.remirepo.net/enterprise/remi-release-7.rpm \
-#    yum-utils >> $initlog
-#yum-config-manager --enable remi-php72 >> $initlog
+yum -y install epel-release
 
 yum update -y
 yum upgrade -y
@@ -139,6 +135,7 @@ echo firewall_udp_ports ${firewall_udp_ports} >> $initlog
 echo install_fail2ban ${install_fail2ban} >> $initlog
 echo install_bitrix ${install_bitrix} >> $initlog
 echo install_autoupdate ${install_autoupdate} >> $initlog
+echo admin username ${admin-username} >> $initlog
 export >> $initlog
 whoami >> $initlog
 pwd >> $initlog
