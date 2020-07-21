@@ -1,3 +1,23 @@
+# environment
+variable "environment" {
+    type        = string
+    description = "The environment to be built"
+    default     = "dev"
+}
+
+# application name 
+variable "app_name" {
+    type        = string
+}
+
+variable "network-vnet" {
+    type        = string
+}
+
+variable "network-rg" {
+    type        = string
+}
+
 # azure bastion region
 variable "bastion_location" {
     type        = string

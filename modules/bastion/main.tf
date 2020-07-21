@@ -28,8 +28,8 @@ resource "azurerm_public_ip" "bastion-public-ip" {
 resource "azurerm_subnet" "azure-bastion-subnet" {
     name                 = "AzureBastionSubnet"
     address_prefixes     = [var.batstion_subnet_cidr]
-    virtual_network_name = azurerm_virtual_network.network-vnet.name
-    resource_group_name  = azurerm_resource_group.network-rg.name
+    virtual_network_name = var.network-vnet
+    resource_group_name  = var.network-rg
 }
 
 resource "azurerm_bastion_host" "bastion-host" {

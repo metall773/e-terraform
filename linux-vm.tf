@@ -3,7 +3,7 @@ module "centos7-vm" {
     app_name                         = "${var.app_name}"
     environment                      = "${var.environment}"
     network-subnet                   = azurerm_subnet.network-subnet.id
-    web-linux-vm-size                = "Standard_B2s"
+    web-linux-vm-size                = "Standard_B1ms"
     web-linux-admin-username         = "azureuser"
     storage_account_type             = "Standard_LRS"
     managed_disk_size_gb             = "5"
@@ -26,4 +26,5 @@ module "centos7-vm2" {
     install_bitrix                   = "no"
     web-linux-admin-username         = "lee"
     managed_disk_mount_point         = "/mnt/data"
+    enable_extenalIP                 = false
 }

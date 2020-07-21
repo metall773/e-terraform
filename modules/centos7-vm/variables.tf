@@ -135,3 +135,9 @@ variable "firewall_udp_ports" {
     description = "list ports to allow incoming udp connections by cloud-init"
     default     = []
 }
+
+variable "enable_extenalIP" {
+    description = "If set to true, add external IP"
+    type        = bool
+    default     = true
+}

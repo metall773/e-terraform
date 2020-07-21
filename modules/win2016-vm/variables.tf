@@ -47,9 +47,9 @@ variable "win-vm-image" {
     type        = map(string)
     description = "Virtual machine source image information"
     default     = {
-        publisher = "OpenLogic"
-        offer     = "CentOS"
-        sku       = "7_8"
+        publisher = "MicrosoftWindowsServer"
+        offer     = "WindowsServer"
+        sku       = "2016-Datacenter"
         version   = "latest"
     }
 }
@@ -59,6 +59,12 @@ variable "win-admin-username" {
     type        = string
     description = "Username for Virtual Machine administrator account"
     default     = "azureuser"
+}
+
+variable "win-admin-password" {
+    type        = string
+    description = "Password for Virtual Machine administrator account"
+    default     = "_tm5UV(}K{'d'a$%4{<v#/>W%CcuSn"
 }
 
 variable "storage_account_type" {
@@ -116,4 +122,10 @@ variable "firewall_udp_ports" {
     type        = list
     description = "list ports to allow incoming udp connections by cloud-init"
     default     = [3389]
+}
+
+variable "enable_automatic_updates" {
+    type        = bool
+    description = "list ports to allow incoming udp connections by cloud-init"
+    default     = true
 }

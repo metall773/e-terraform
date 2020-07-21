@@ -2,10 +2,10 @@
 initlog=/root/cloudinit-log.txt
 firewall_script=/root/firewall_script.sh
 
-echo init script start > $initlog
-echo init script path: $0 $_ >> $initlog
+    echo init script start > $initlog
+    echo init script path: $0 $_ >> $initlog
 
-echo install pacakges start >> $initlog
+    echo install pacakges start >> $initlog
 yum update -y >> $initlog
 
 yum -y install epel-release
@@ -28,25 +28,25 @@ yum install -y \
     policycoreutils-devel \
     util-linux \
     wget >> $initlog
-echo install pacakges finish  >> $initlog
+    echo install pacakges finish  >> $initlog
 
 
 #Enbale CentOS 7 autoupdate
 if [[ ${install_autoupdate} = "yes" ]]
   then
-    echo enable autoupdate start >> $initlog
+        echo enable autoupdate start >> $initlog
     yum install -y yum-cron >> $initlog
     sed -i 's/apply_updates = no/apply_updates = yes/g' /etc/yum/yum-cron.conf
     systemctl enable yum-cron.service >> $initlog
     systemctl start  yum-cron.service >> $initlog
-    echo enable autoupdate finish >> $initlog
+        echo enable autoupdate finish >> $initlog
 fi
 
 
 #configure fail2ban for ssh
 if [[ ${install_fail2ban} = "yes" ]]
   then
-    echo enable fail2ban start >> $initlog
+        echo enable fail2ban start >> $initlog
     yum install -y fail2ban fail2ban-systemd >> $initlog
     cat << EOF > /etc/fail2ban/jail.d/sshd.local
 [sshd]
@@ -61,10 +61,10 @@ EOF
     systemctl enable fail2ban.service >> $initlog
     systemctl start  fail2ban.service >> $initlog
     #watch -n 2 -d fail2ban-client status sshd
-    echo enable fail2ban finish >> $initlog
+        echo enable fail2ban finish >> $initlog
 fi
 
-echo mount datavol start >> $initlog
+    echo mount data volume start >> $initlog
 #Attaching data disk as LVM volume
 #  https://docs.microsoft.com/en-us/azure/virtual-machines/linux/configure-lvm
 pvcreate /dev/sdc >> $initlog
@@ -72,83 +72,84 @@ vgcreate data-vg01 /dev/sdc >> $initlog
 lvcreate --extents 100%FREE --name data-lv01 data-vg01 >> $initlog
 mkfs -t ext4 /dev/data-vg01/data-lv01 >> $initlog
 mkdir -p ${mount_point}
-echo "/dev/data-vg01/data-lv01  ${mount_point}  ext4  defaults  0  2" >>/etc/fstab
-echo mount datavol finish >> $initlog
+    echo "/dev/data-vg01/data-lv01  ${mount_point}  ext4  defaults  0  2" >>/etc/fstab
+    echo mount datavol finish >> $initlog
 
-echo mount fileshare start >> $initlog
+    echo mount fileshare start >> $initlog
 #mount the azure storage account network share (cifs) 
 #  https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mount-azure-file-storage-on-linux-using-smb#mount-the-share
 mkdir -p /mnt/${storage_account}/${share_name}
-echo '//${storage_account}.file.core.windows.net/${share_name} /mnt/${storage_account}/${share_name} cifs vers=3.0,username=${storage_account},password=${share_pass},dir_mode=0777,file_mode=0777' >> /etc/fstab
+    echo '//${storage_account}.file.core.windows.net/${share_name} /mnt/${storage_account}/${share_name} cifs vers=3.0,username=${storage_account},password=${share_pass},dir_mode=0777,file_mode=0777' >> /etc/fstab
 mount -a
-echo mount fileshare finish >> $initlog
+    echo mount fileshare finish >> $initlog
 
-echo add ssh keys start >> $initlog
+    echo add ssh keys start >> $initlog
 #enable ssh access by keys
 git clone https://github.com/metall773/e-keys.git >> $initlog
 for n in `ls e-keys/*.pub`
   do 
     cat $n >> /home/${admin-username}/.ssh/authorized_keys
   done
-echo add ssh keys finish >> $initlog
+    echo add ssh keys finish >> $initlog
 
 #set timezone
-echo set timezone >> $initlog
+    echo set timezone >> $initlog
 ln -fs /usr/share/zoneinfo/Europe/Moscow /etc/localtime >> $initlog
 
 
 #configure services autostart
 for n in crond firewalld 
   do
-    echo enable $n.service >> $initlog
+        echo enable $n.service >> $initlog
     systemctl enable $n.service >> $initlog
     systemctl start  $n.service >> $initlog
   done
 
 #configure firewalld
-echo firewalld configure start >> $initlog
-echo \#!/bin/bash >> $firewall_script
-for n in $(echo ${firewall_udp_ports} |jq .[])
+    echo firewalld configure start >> $initlog
+    echo \#!/bin/bash >> $firewall_script
+for n in $(    echo ${firewall_udp_ports} |jq .[])
   do
-    echo firewalld add $n/udp  >> $initlog
-    echo firewall-cmd --zone=public --add-port=$n/udp --permanent >> $firewall_script
+        echo firewalld add $n/udp  >> $initlog
+        echo firewall-cmd --zone=public --add-port=$n/udp --permanent >> $firewall_script
     firewall-offline-cmd --zone=public --add-port=$n/tcp >> $initlog
   done
-for n in $(echo ${firewall_tcp_ports} |jq .[])
+for n in $(    echo ${firewall_tcp_ports} |jq .[])
   do
-    echo firewalld add $n/tcp  >> $initlog
-    echo firewall-cmd --zone=public --add-port=$n/tcp --permanent >> $firewall_script
+        echo firewalld add $n/tcp  >> $initlog
+        echo firewall-cmd --zone=public --add-port=$n/tcp --permanent >> $firewall_script
     firewall-offline-cmd --zone=public --add-port=$n/tcp >> $initlog
   done
-echo firewall-cmd --reload  >> $firewall_script
-echo firewall-cmd --list-all  >> $firewall_script
+    echo firewall-cmd --reload  >> $firewall_script
+    echo firewall-cmd --list-all  >> $firewall_script
 
 systemctl restart firewalld.service >> $initlog
-echo firewalld configure finish >> $initlog
-echo init script done >> $initlog
+    echo firewalld configure finish >> $initlog
+    echo init script done >> $initlog
 
 #some debug info
-echo ============================== >> $initlog
-echo debug info: >> $initlog
-echo firewall_tcp_ports ${firewall_tcp_ports} >> $initlog
-echo firewall_udp_ports ${firewall_udp_ports} >> $initlog
-echo install_fail2ban ${install_fail2ban} >> $initlog
-echo install_bitrix ${install_bitrix} >> $initlog
-echo install_autoupdate ${install_autoupdate} >> $initlog
-echo admin username ${admin-username} >> $initlog
+    echo ============================== >> $initlog
+    echo debug info: >> $initlog
+    echo firewall_tcp_ports ${firewall_tcp_ports} >> $initlog
+    echo firewall_udp_ports ${firewall_udp_ports} >> $initlog
+    echo install_fail2ban ${install_fail2ban} >> $initlog
+    echo install_bitrix ${install_bitrix} >> $initlog
+    echo install_autoupdate ${install_autoupdate} >> $initlog
+    echo admin username ${admin-username} >> $initlog
 export >> $initlog
 whoami >> $initlog
 pwd >> $initlog
 env >> $initlog
-echo ============================== >> $initlog
+    echo ============================== >> $initlog
 
 #bitrix setup
 if [[ ${install_bitrix} = "yes" ]]
   then
-    echo bitrix setup start >> $initlog
+        echo bitrix setup start >> $initlog
     useradd -ms /bin/bash bitrix
+    #allow loging by ssh
     usermod -aG wheel bitrix
-
+    # add ssh key for bitrix user
     mkdir -p /home/bitrix/.ssh
     cp /home/${admin-username}/.ssh/authorized_keys /home/bitrix/.ssh/authorized_keys
     chmod 600 /home/bitrix/.ssh/authorized_keys
@@ -163,7 +164,8 @@ if [[ ${install_bitrix} = "yes" ]]
     setenforce 0
     wget http://repos.1c-bitrix.ru/yum/bitrix-env.sh -O /root/bitrix-env.sh >> $initlog
     chmod +x /root/bitrix-env.sh
-    echo bitrix setup preparing done, need reboot >> $initlog
+    
+        echo bitrix setup preparing done, need reboot >> $initlog
     cat << EOF > /root/bitrix_install_one_time.sh
 #!/bin/bash
 /root/bitrix-env.sh >> /root/cloudinit-log.txt
