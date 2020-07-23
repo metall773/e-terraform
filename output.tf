@@ -11,7 +11,7 @@ output "win1-vm" {
 }
 
 output "centos7_vm_db" {
-    value = "pqsl -h ${module.postgresql_db1.username} -U ${module.postgresql_db1.fqdn}"
+    value = "pqsl -U ${module.postgresql_db1.username} -h ${module.postgresql_db1.fqdn} -d test"
 }
 
 output "centos7_vm2_db" {
