@@ -1,5 +1,5 @@
 resource "azurerm_mysql_server" "mysql-db" {
-  name                = "${var.db-prefix}-mysqlserver"
+  name                = "${var.db-prefix}-mysql"
   location            = var.location
   resource_group_name = var.vm_resource_group
 

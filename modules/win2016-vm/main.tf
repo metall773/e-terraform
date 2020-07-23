@@ -38,6 +38,10 @@ resource "azurerm_windows_virtual_machine" "win_virtual_machine" {
     sku       = lookup(var.win-vm-image, "sku", null)
     version   = lookup(var.win-vm-image, "version", null)
   }
+
+  boot_diagnostics {
+    storage_account_uri = azurerm_storage_account.mystorageaccount.primary_blob_endpoint
+  }
   
   tags = {
     application = var.app_name

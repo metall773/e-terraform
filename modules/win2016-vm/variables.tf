@@ -64,7 +64,7 @@ variable "win-admin-username" {
 variable "win-admin-password" {
     type        = string
     description = "Password for Virtual Machine administrator account"
-    default     = "_tm5UV(}K{'d'a$%4{<v#/>W%CcuSn"
+    default     = "fljghslhgslgjhlkgjdh234923469djhdjshgksdjgh!@#A"
 }
 
 variable "storage_account_type" {

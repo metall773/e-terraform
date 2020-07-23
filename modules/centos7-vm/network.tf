@@ -3,7 +3,7 @@ resource "azurerm_public_ip" "public-ip" {
   name                = "${local.vm_name}-PublicIP"
   location            = var.location
   resource_group_name = azurerm_resource_group.myterraformgroup.name
-  allocation_method   = "Dynamic"
+  allocation_method   = "Static"
   domain_name_label   = local.vm_name
 
   tags = {
@@ -22,7 +22,7 @@ resource "azurerm_network_interface" "nic" {
   ip_configuration {
     name                          = "${local.vm_name}-NicConfiguration"
     subnet_id                     = var.network-subnet
-    private_ip_address_allocation = "Dynamic"
+    private_ip_address_allocation = "Static"
     public_ip_address_id          = azurerm_public_ip.public-ip.id
   }
 
