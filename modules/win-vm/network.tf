@@ -22,7 +22,7 @@ resource "azurerm_network_interface" "win_network_interface" {
   ip_configuration {
     name                          = "${local.vm_name}-PrivateIP"
     subnet_id                     = var.network-subnet
-    private_ip_address_allocation = "Dinamic"
+    private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.public-ip.id
   }
 
