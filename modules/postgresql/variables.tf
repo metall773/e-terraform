@@ -9,7 +9,7 @@ variable "environment" {
 variable "location" {
     type        = string
     description = "Azure region where the resources will be created"
-    default     = "north europe" # "germanywestcentral"
+    default     = "north europe"
 }
 
 # application name 
@@ -45,7 +45,7 @@ variable "db-size" {
 }
 
 variable "db-version" {
-    default = "5.7"
+    default = "10"
 }
 
 #DB variables
@@ -76,4 +76,3 @@ variable "auto_grow_enabled" {
 variable "public_ip_address" {
     type    = string
 }
-
