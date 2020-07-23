@@ -20,29 +20,6 @@ resource "tls_private_key" "example_ssh" {
   rsa_bits  = 4096
 }
 
-# /home/bitrix disk
-resource "azurerm_managed_disk" "linux-vm-managed_disk" {
-  name                 = "${local.vm_name}-managed-data-disk"
-  location             = azurerm_resource_group.myterraformgroup.location
-  resource_group_name  = azurerm_resource_group.myterraformgroup.name
-  storage_account_type = var.storage_account_type
-  create_option        = "Empty"
-  os_type              = "Linux"
-  disk_size_gb         = var.managed_disk_size_gb
-      tags = {
-        application = var.app_name
-        environment = var.environment
-        vm-name     = local.vm_name
-    }
-}
-
-resource "azurerm_virtual_machine_data_disk_attachment" "linux-vm-managed_disk" {
-  virtual_machine_id = azurerm_linux_virtual_machine.myterraformvm.id
-  managed_disk_id    = azurerm_managed_disk.linux-vm-managed_disk.id
-  lun                = 1
-  caching            = "None"
-}
-
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = local.vm_name

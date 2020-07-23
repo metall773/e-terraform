@@ -1,4 +1,5 @@
 #!/bin/bash
+#set variables
 initlog=/root/cloudinit-log.txt
 firewall_script=/root/firewall_script.sh
 
@@ -8,10 +9,10 @@ firewall_script=/root/firewall_script.sh
     echo install pacakges start >> $initlog
 yum update -y >> $initlog
 
-yum -y install epel-release
+yum -y install epel-release >> $initlog
 
-yum update -y
-yum upgrade -y
+yum update -y >> $initlog
+yum upgrade -y >> $initlog
 yum install -y \
     bash-completion \
     bind-utils \
@@ -108,13 +109,13 @@ for n in crond firewalld
 #configure firewalld
     echo firewalld configure start >> $initlog
     echo \#!/bin/bash >> $firewall_script
-for n in $(    echo ${firewall_udp_ports} |jq .[])
+for n in $(echo ${firewall_udp_ports} |jq .[])
   do
         echo firewalld add $n/udp  >> $initlog
         echo firewall-cmd --zone=public --add-port=$n/udp --permanent >> $firewall_script
     firewall-offline-cmd --zone=public --add-port=$n/tcp >> $initlog
   done
-for n in $(    echo ${firewall_tcp_ports} |jq .[])
+for n in $(echo ${firewall_tcp_ports} |jq .[])
   do
         echo firewalld add $n/tcp  >> $initlog
         echo firewall-cmd --zone=public --add-port=$n/tcp --permanent >> $firewall_script
@@ -140,9 +141,10 @@ export >> $initlog
 whoami >> $initlog
 pwd >> $initlog
 env >> $initlog
+date >> $initlog
     echo ============================== >> $initlog
 
-#bitrix setup
+#bitrix setup magic
 if [[ ${install_bitrix} = "yes" ]]
   then
         echo bitrix setup start >> $initlog
@@ -174,7 +176,7 @@ systemctl daemon-reload
 rm -f /etc/systemd/system/sample.service
 EOF
     chmod +x /root/bitrix_install_one_time.sh
-cat << EOF > /etc/systemd/system/sample.service
+    cat << EOF > /etc/systemd/system/sample.service
 [Unit]
 Description=Description for sample script goes here
 After=network.target

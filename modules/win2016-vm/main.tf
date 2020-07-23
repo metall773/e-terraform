@@ -13,25 +13,6 @@ resource "azurerm_resource_group" "win-terraform-group" {
   }
 }
 
-resource "azurerm_network_interface" "win_network_interface" {
-  name                = "${local.vm_name}-NIC"
-  location            = azurerm_resource_group.win-terraform-group.location
-  resource_group_name = azurerm_resource_group.win-terraform-group.name
-
-  ip_configuration {
-    name                          = "${local.vm_name}-PrivateIP"
-    subnet_id                     = var.network-subnet
-    private_ip_address_allocation = "Dynamic"
-  }
-
-  tags = {
-    application = var.app_name
-    environment = var.environment
-    vm-name     = local.vm_name
-  }
-
-}
-
 resource "azurerm_windows_virtual_machine" "win_virtual_machine" {
   name                     = local.vm_name
   resource_group_name      = azurerm_resource_group.win-terraform-group.name
@@ -39,7 +20,9 @@ resource "azurerm_windows_virtual_machine" "win_virtual_machine" {
   size                     = var.win-vm-size
   admin_username           = var.win-admin-username
   admin_password           = var.win-admin-password
+  computer_name            = local.vm_name
   enable_automatic_updates = var.enable_automatic_updates
+  provision_vm_agent       = true
   network_interface_ids    = [
     azurerm_network_interface.win_network_interface.id,
   ]

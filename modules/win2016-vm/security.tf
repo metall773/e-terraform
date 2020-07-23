@@ -2,7 +2,7 @@
 resource "azurerm_network_security_group" "myterraformnsg" {
   name                = "${local.vm_name}-NetworkSecurityGroup"
   location            = var.location
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = azurerm_resource_group.win-terraform-group.name
 
   tags = {
         application = var.app_name
@@ -22,7 +22,7 @@ resource "azurerm_network_security_rule" "inbound_tcp_rules" {
   destination_address_prefix  = "*"
   destination_port_range      = element(var.firewall_tcp_ports, count.index)
   protocol                    = "TCP"
-  resource_group_name         = azurerm_resource_group.myterraformgroup.name
+  resource_group_name         = azurerm_resource_group.win-terraform-group.name
   network_security_group_name = azurerm_network_security_group.myterraformnsg.name
 }
 
@@ -37,12 +37,13 @@ resource "azurerm_network_security_rule" "inbound_udp_rules" {
   destination_address_prefix  = "*"
   destination_port_range      = element(var.firewall_udp_ports, count.index)
   protocol                    = "UDP"
-  resource_group_name         = azurerm_resource_group.myterraformgroup.name
+  resource_group_name         = azurerm_resource_group.win-terraform-group.name
   network_security_group_name = azurerm_network_security_group.myterraformnsg.name
 }
 
+
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "association" {
-  network_interface_id      = azurerm_network_interface.nic.id
+  network_interface_id      = azurerm_network_interface.win_network_interface.id
   network_security_group_id = azurerm_network_security_group.myterraformnsg.id
 }

@@ -17,12 +17,13 @@ module "win1-vm" {
     win-vm-size                      = "Standard_B2s"
     win-admin-username               = "lee"
     storage_account_type             = "Standard_LRS"
-    managed_disk_size_gb             = "5"
+    managed_disk_size_gb             = "53"
     win-vm-prefix                    = "win1"
     location                         = "north europe"
     azurerm_storage_account_tier     = "Standard"
     azurerm_account_replication_type = "LRS"
     azurerm_storage_share_quota      = "48"
-    firewall_tcp_ports               = [22, 80, 443, 8433]
+    firewall_tcp_ports               = [3389, 80, 443, 8433]
+    firewall_udp_ports               = [3389]
     enable_automatic_updates         = true
 }
