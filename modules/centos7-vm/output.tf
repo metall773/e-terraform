@@ -1,5 +1,5 @@
-/*data "azurerm_public_ip" "public-ip" {
-    name                = azurerm_public_ip.public-ip[0].name
+data "azurerm_public_ip" "public-ip" {
+    name                = azurerm_public_ip.public-ip.name
     resource_group_name = azurerm_linux_virtual_machine.myterraformvm.resource_group_name
 }
 
@@ -17,4 +17,9 @@ output "username" {
 
 output "tls_private_key" { 
     value = tls_private_key.example_ssh.private_key_pem
-} */
+} 
+
+output "vm_resource_group" {
+    value = azurerm_resource_group.myterraformgroup
+    depends_on = [azurerm_resource_group.myterraformgroup]
+}
