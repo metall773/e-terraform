@@ -10,7 +10,7 @@ module "bastion" {
 }
 
 module "win1-vm" {
-  source = "./modules/win2016-vm"
+  source = "./modules/win-vm"
     app_name                         = "${var.app_name}"
     environment                      = "${var.environment}"
     network-subnet                   = azurerm_subnet.network-subnet.id
