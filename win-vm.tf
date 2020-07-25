@@ -1,7 +1,7 @@
 module "bastion" {
   source = "./modules/bastion"
-    app_name                         = "${var.app_name}"
-    environment                      = "${var.environment}"
+    app_name                         = var.app_name
+    environment                      = var.environment
     network-vnet                     = azurerm_virtual_network.network-vnet.name
     network-rg                       = azurerm_resource_group.network-rg.name
     batstion_subnet_cidr             = "10.16.2.0/24"
@@ -11,8 +11,8 @@ module "bastion" {
 
 module "win1-vm" {
   source = "./modules/win-vm"
-    app_name                         = "${var.app_name}"
-    environment                      = "${var.environment}"
+    app_name                         = var.app_name
+    environment                      = var.environment
     network-subnet                   = azurerm_subnet.network-subnet.id
     win-vm-size                      = "Standard_B2s"
     win-admin-username               = "lee"
@@ -26,4 +26,7 @@ module "win1-vm" {
     firewall_tcp_ports               = [3389, 80, 443, 8433]
     firewall_udp_ports               = [3389]
     enable_automatic_updates         = true
+    shared_disk_name                 = azurerm_storage_share.fileshare4all.name
+    shared_disk_storage_account      = azurerm_storage_account.storageaccount4all
+
 }

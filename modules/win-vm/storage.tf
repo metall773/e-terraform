@@ -54,7 +54,7 @@ resource "azurerm_storage_share" "myfileshare" {
   }
 }
 
-# /home/bitrix disk
+# additional disk
 resource "azurerm_managed_disk" "win-vm-managed_disk" {
   name                 = "${local.vm_name}-managed-data-disk"
   location             = azurerm_resource_group.win-terraform-group.location

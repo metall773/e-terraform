@@ -1,7 +1,7 @@
 module "centos7-vm" {
   source = "./modules/centos7-vm"
-    app_name                         = "${var.app_name}"
-    environment                      = "${var.environment}"
+    app_name                         = var.app_name
+    environment                      = var.environment
     network-subnet                   = azurerm_subnet.network-subnet.id
     web-linux-vm-size                = "Standard_B1ms"
     web-linux-admin-username         = "azureuser"
@@ -17,8 +17,8 @@ module "centos7-vm" {
 
 module "centos7-vm2" {
   source = "./modules/centos7-vm"
-    app_name                         = "${var.app_name}"
-    environment                      = "${var.environment}"
+    app_name                         = var.app_name
+    environment                      = var.environment
     network-subnet                   = azurerm_subnet.network-subnet.id
     web-linux-vm-prefix              = "mouse"
     firewall_tcp_ports               = [22, 80, 443]

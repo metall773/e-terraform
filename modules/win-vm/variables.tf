@@ -123,3 +123,10 @@ variable "enable_automatic_updates" {
     description = "list ports to allow incoming udp connections by cloud-init"
     default     = true
 }
+
+variable "shared_disk_storage_account" {
+}
+
+variable "shared_disk_name" {
+    type        = string
+}

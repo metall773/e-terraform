@@ -1,7 +1,7 @@
 module "mysql_db1" {
   source = "./modules/mysql"
-    app_name                         = "${var.app_name}"
-    environment                      = "${var.environment}"
+    app_name                         = var.app_name
+    environment                      = var.environment
     vm_resource_group                = module.centos7-vm2.vm_resource_group.name
     db-prefix                        = module.centos7-vm2.vm_resource_group.name
     public_network_access_enabled    = true
@@ -10,8 +10,8 @@ module "mysql_db1" {
 
 module "postgresql_db1" {
   source = "./modules/postgresql"
-    app_name                         = "${var.app_name}"
-    environment                      = "${var.environment}"
+    app_name                         = var.app_name
+    environment                      = var.environment
     vm_resource_group                = module.centos7-vm.vm_resource_group.name
     db-prefix                        = module.centos7-vm.vm_resource_group.name
     public_network_access_enabled    = true
