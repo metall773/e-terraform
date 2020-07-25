@@ -73,7 +73,7 @@ vgcreate data-vg01 /dev/sdc >> $initlog
 lvcreate --extents 100%FREE --name data-lv01 data-vg01 >> $initlog
 mkfs -t ext4 /dev/data-vg01/data-lv01 >> $initlog
 mkdir -p ${mount_point}
-    echo "/dev/data-vg01/data-lv01  ${mount_point}  ext4  defaults  0  2" >>/etc/fstab
+echo "/dev/data-vg01/data-lv01  ${mount_point}  ext4  defaults  0  2" >>/etc/fstab
     echo mount datavol finish >> $initlog
 
     echo mount fileshare start >> $initlog

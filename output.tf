@@ -18,3 +18,4 @@ output "centos7_vm2_db" {
     value = "mysql -h ${module.mysql_db1.fqdn} -u ${module.mysql_db1.username} -p"
 }
 
+
