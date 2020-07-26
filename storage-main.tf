@@ -1,18 +1,7 @@
-resource "azurerm_resource_group" "terraformgroup4all" {
-  name     = "${var.environment}-share"
-  location = var.location
-
-  tags = {
-    application = var.app_name
-    environment = var.environment
-  }
-}
-
-
 resource "random_id" "randomId-share4all" {
   keepers = {
     # Generate a new ID only when a new resource group is defined
-    resource_group = azurerm_resource_group.terraformgroup4all.name
+    resource_group = azurerm_resource_group.terraformgroup.name
   }
 
   byte_length = 8
@@ -21,7 +10,7 @@ resource "random_id" "randomId-share4all" {
 # Create storage account for network work share for all WM 
 resource "azurerm_storage_account" "storageaccount4all" {
   name                     = "4alls${random_id.randomId-share4all.hex}"
-  resource_group_name      = azurerm_resource_group.terraformgroup4all.name
+  resource_group_name      = azurerm_resource_group.terraformgroup.name
   location                 = var.location
   account_tier             = "Standard"
   account_replication_type = "LRS"
@@ -34,7 +23,7 @@ resource "azurerm_storage_account" "storageaccount4all" {
 
 resource "azurerm_storage_share" "fileshare4all" {
   name                 = "${var.environment}-share-4-all"
-  storage_account_name = azurerm_storage_account.storageaccount4all.name
+  storage_account_name = azurerm_storage_account.terraformgroup.name
   quota                = 100
 
   acl {
