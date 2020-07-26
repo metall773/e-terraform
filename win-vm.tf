@@ -3,7 +3,7 @@ module "bastion" {
     app_name                         = var.app_name
     environment                      = var.environment
     network-vnet                     = azurerm_virtual_network.network-vnet.name
-    network-rg                       = azurerm_resource_group.network-rg.name
+    network-rg                       = azurerm_resource_group.terraformgroup.name
     batstion_subnet_cidr             = "10.16.2.0/24"
     # posible locations listed here https://docs.microsoft.com/en-us/azure/bastion/bastion-overview#faq
     bastion_location                 = "north europe"

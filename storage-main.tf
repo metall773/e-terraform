@@ -23,7 +23,7 @@ resource "azurerm_storage_account" "storageaccount4all" {
 
 resource "azurerm_storage_share" "fileshare4all" {
   name                 = "${var.environment}-share-4-all"
-  storage_account_name = azurerm_storage_account.terraformgroup.name
+  storage_account_name = azurerm_storage_account.storageaccount4all.name
   quota                = 100
 
   acl {
