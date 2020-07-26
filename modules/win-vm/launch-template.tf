@@ -4,7 +4,7 @@ locals {
   share_login      = azurerm_storage_account.mystorageaccount-files.name
   share_pass       = azurerm_storage_account.mystorageaccount-files.primary_access_key
 
-  init_params = "-share_host ${local.share_host} -share_name ${local.share_name} -share_login ${local.share_login} -share_pass ${local.share_pass} -share_disk_host ${var.share_disk_host} -share_disk_name ${var.share_disk_name} -share_disk_login ${var.share_disk_login} -share_disk_pass ${var.share_disk_pass} -choco_list '${var.choco_list}'
+  init_params = "-share_host ${local.share_host} -share_name ${local.share_name} -share_login ${local.share_login} -share_pass ${local.share_pass} -share_disk_host ${var.share_disk_host} -share_disk_name ${var.share_disk_name} -share_disk_login ${var.share_disk_login} -share_disk_pass ${var.share_disk_pass} -choco_list '${var.choco_list}'"
 }
 
 #https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows#troubleshoot-and-support
