@@ -132,7 +132,7 @@ variable "shared_disk_name" {
 }
 
 variable "choco_list" {
-    type        = list
+    type        = string
     description = "list software installed by cloud-init, full list here https://chocolatey.org/packages"
-    default     = []
+    default     = ""
 }
