@@ -17,7 +17,7 @@ module "win1-vm" {
     win-vm-size                      = "Standard_B2s"
     win-admin-username               = "lee"
     storage_account_type             = "Standard_LRS"
-    managed_disk_size_gb             = "53"
+    managed_disk_size_gb             = [53, 5]
     win-vm-prefix                    = "win1"
     location                         = "north europe"
     azurerm_storage_account_tier     = "Standard"

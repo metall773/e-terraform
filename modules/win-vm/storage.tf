@@ -56,13 +56,14 @@ resource "azurerm_storage_share" "myfileshare" {
 
 # additional disk
 resource "azurerm_managed_disk" "win-vm-managed_disk" {
-  name                 = "${local.vm_name}-managed-data-disk"
+  count                = length(var.managed_disk_size_gb)
+  name                 = "${local.vm_name}-managed-data-disk${count.index}"
   location             = azurerm_resource_group.win-terraform-group.location
   resource_group_name  = azurerm_resource_group.win-terraform-group.name
   storage_account_type = var.storage_account_type
   create_option        = "Empty"
   os_type              = "Windows"
-  disk_size_gb         = var.managed_disk_size_gb
+  disk_size_gb         = element(var.managed_disk_size_gb, count.index)
       tags = {
         application = var.app_name
         environment = var.environment

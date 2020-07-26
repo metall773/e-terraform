@@ -74,9 +74,9 @@ variable "storage_account_type" {
 }
 
 variable "managed_disk_size_gb" {
-    type        = string
+    type        = list
     description = "The size of the Managed Disk in gigabytes"
-    default     = "5"
+    default     = [5]
 }
 
 variable "win-vm-prefix" {
