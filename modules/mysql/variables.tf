@@ -79,5 +79,4 @@ variable "public_ip_address" {
 
 variable "database_name" {
     type    = string
-    default = var.db-prefix
 }
