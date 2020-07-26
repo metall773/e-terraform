@@ -1,4 +1,4 @@
-resource "azurerm_mysql_server" "mysql-db" {
+resource "azurerm_mysql_server" "mysql-server" {
   name                = "${var.db-prefix}-mysql"
   location            = var.location
   resource_group_name = var.vm_resource_group
@@ -23,4 +23,13 @@ resource "azurerm_mysql_server" "mysql-db" {
     environment = var.environment
     vm-name     = var.vm_resource_group
   }
+}
+
+# Create a MySQL Database
+resource "azurerm_mysql_database" "mysql-db" {
+  name                = var.database_name
+  resource_group_name = var.vm_resource_group
+  server_name         = azurerm_mysql_server.mysql-server.name
+  charset             = "utf8"
+  collation           = "utf8_unicode_ci"
 }

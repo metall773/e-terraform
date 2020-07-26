@@ -6,6 +6,7 @@ module "mysql_db1" {
     db-prefix                        = module.centos7-vm2.vm_resource_group.name
     public_network_access_enabled    = true
     public_ip_address                = module.centos7-vm2.public_ip_address
+    database_name                    = "db1"
 }
 
 module "postgresql_db1" {
