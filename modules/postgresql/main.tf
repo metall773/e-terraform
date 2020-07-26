@@ -1,4 +1,4 @@
-resource "azurerm_postgresql_server" "postgresql-db" {
+resource "azurerm_postgresql_server" "postgresql-server" {
   name                = "${var.db-prefix}-postgresql"
   location            = var.location
   resource_group_name = var.vm_resource_group

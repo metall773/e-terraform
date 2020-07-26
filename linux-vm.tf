@@ -13,6 +13,8 @@ module "centos7-vm" {
     azurerm_account_replication_type = "LRS"
     azurerm_storage_share_quota      = "50"
     firewall_tcp_ports               = [22, 80, 443, 8433]
+    shared_disk_name                 = azurerm_storage_share.fileshare4all.name
+    shared_disk_storage_account      = azurerm_storage_account.storageaccount4all
 }
 
 module "centos7-vm2" {
@@ -27,4 +29,6 @@ module "centos7-vm2" {
     web-linux-admin-username         = "lee"
     managed_disk_mount_point         = "/mnt/data"
     #enable_extenalIP                 = false
+    shared_disk_name                 = azurerm_storage_share.fileshare4all.name
+    shared_disk_storage_account      = azurerm_storage_account.storageaccount4all
 }

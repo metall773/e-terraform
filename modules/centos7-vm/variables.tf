@@ -141,3 +141,10 @@ variable "enable_extenalIP" {
     type        = bool
     default     = true
 }
+
+variable "shared_disk_storage_account" {
+}
+
+variable "shared_disk_name" {
+    type        = string
+}

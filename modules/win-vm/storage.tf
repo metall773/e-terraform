@@ -76,5 +76,5 @@ resource "azurerm_virtual_machine_data_disk_attachment" "win-vm-managed_disk" {
   virtual_machine_id = azurerm_windows_virtual_machine.win_virtual_machine.id
   managed_disk_id    = azurerm_managed_disk.win-vm-managed_disk[count.index].id
   lun                = 2 + count.index
-  caching            = "None"
+  caching            = "ReadWrite"
 }

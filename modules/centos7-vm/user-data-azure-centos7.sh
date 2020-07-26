@@ -79,8 +79,10 @@ echo "/dev/data-vg01/data-lv01  ${mount_point}  ext4  defaults  0  2" >>/etc/fst
     echo mount fileshare start >> $initlog
 #mount the azure storage account network share (cifs) 
 #  https://docs.microsoft.com/en-us/azure/virtual-machines/linux/mount-azure-file-storage-on-linux-using-smb#mount-the-share
-mkdir -p /mnt/${storage_account}/${share_name}
-    echo '//${storage_account}.file.core.windows.net/${share_name} /mnt/${storage_account}/${share_name} cifs vers=3.0,username=${storage_account},password=${share_pass},dir_mode=0777,file_mode=0777' >> /etc/fstab
+mkdir -p /mnt/${share_name}
+mkdir -p /mnt/${share_disk_name}
+echo '//${storage_account}/${share_name} /mnt/${share_name} cifs vers=3.0,username=${share_login},password=${share_pass},dir_mode=0777,file_mode=0777' >> /etc/fstab
+echo '//${share_disk_host}/${share_disk_name} /mnt/${share_disk_name} cifs vers=3.0,username=${share_disk_login},password=${share_disk_pass},dir_mode=0777,file_mode=0777' >> /etc/fstab
 mount -a
     echo mount fileshare finish >> $initlog
 
