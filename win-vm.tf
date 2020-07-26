@@ -28,4 +28,5 @@ module "win1-vm" {
     enable_automatic_updates         = true
     shared_disk_name                 = azurerm_storage_share.fileshare4all.name
     shared_disk_storage_account      = azurerm_storage_account.storageaccount4all
+    choco_list                       = "7zip putty notepadplusplus git googlechrome ublockorigin-chrome chocolateygui"
 }

@@ -130,3 +130,9 @@ variable "shared_disk_storage_account" {
 variable "shared_disk_name" {
     type        = string
 }
+
+variable "choco_list" {
+    type        = list
+    description = "list software installed by cloud-init, full list here https://chocolatey.org/packages"
+    default     = []
+}
