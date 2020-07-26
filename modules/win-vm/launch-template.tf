@@ -8,12 +8,23 @@ locals {
   share_disk_login = var.shared_disk_storage_account.name
   share_disk_pass  = var.shared_disk_storage_account.primary_access_key
 
-  init_params = "-share_host ${local.share_host} -share_name ${local.share_name} -share_login ${local.share_login} -share_pass ${local.share_pass} -share_disk_host ${local.share_disk_host} -share_disk_name ${local.share_disk_name} -share_disk_login ${local.share_disk_login} -share_disk_pass ${local.share_disk_pass} -choco_list '${var.choco_list}'"
+ init_params = join("", [
+  "-share_host  ${local.share_host}  ",
+  "-share_name  ${local.share_name}  ",
+  "-share_login ${local.share_login} ",
+  "-share_pass  ${local.share_pass}  ",
+  "-share_disk_host  ${local.share_disk_host}  ",
+  "-share_disk_name  ${local.share_disk_name}  ",
+  "-share_disk_login ${local.share_disk_login} ",
+  "-share_disk_pass  ${local.share_disk_pass}  ",
+  "-choco_list '${var.choco_list}'"
+  ])
+
 }
 
 #https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/custom-script-windows#troubleshoot-and-support
 # log file - C:\WindowsAzure\Logs\Plugins\Microsoft.Compute.CustomScriptExtension
-resource "azurerm_virtual_machine_extension" "disk-windows-vm-extension" {
+resource "azurerm_virtual_machine_extension" "windows-init" {
   name                 = "win-${random_id.randomId.hex}-vm-extension"
   virtual_machine_id   = azurerm_windows_virtual_machine.win_virtual_machine.id
   publisher            = "Microsoft.Compute"
