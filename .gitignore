@@ -1,5 +1,3 @@
 .DS_Store
 .terraform
 export.sh
-modules/bastion/.terraform
-modules/linux-vm/.terraform

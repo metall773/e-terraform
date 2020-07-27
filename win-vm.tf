@@ -2,7 +2,7 @@ module "bastion" {
   source = "github.com/metall773/e-terraform-modules.git//modules/bastion"
     app_name                         = var.app_name
     environment                      = var.environment
-    network-vnet                     = azurerm_virtual_network.network-vnet.name
+    network-vnet                     = module.network.network-vnet.name
     network-rg                       = azurerm_resource_group.terraformgroup.name
     batstion_subnet_cidr             = "10.16.2.0/24"
     # posible locations listed here https://docs.microsoft.com/en-us/azure/bastion/bastion-overview#faq
@@ -13,7 +13,7 @@ module "win1-vm" {
   source = "github.com/metall773/e-terraform-modules.git//modules/win-vm"
     app_name                         = var.app_name
     environment                      = var.environment
-    network-subnet                   = azurerm_subnet.network-subnet.id
+    network-subnet                   = module.network.network-subnet.id
     win-vm-size                      = "Standard_B2s"
     win-admin-username               = "lee"
     storage_account_type             = "Standard_LRS"

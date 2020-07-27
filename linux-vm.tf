@@ -2,7 +2,7 @@ module "centos7-vm" {
   source = "github.com/metall773/e-terraform-modules.git//modules/centos7-vm"
     app_name                         = var.app_name
     environment                      = var.environment
-    network-subnet                   = azurerm_subnet.network-subnet.id
+    network-subnet                   = module.network.network-subnet.id
     web-linux-vm-size                = "Standard_B1ms"
     web-linux-admin-username         = "azureuser"
     storage_account_type             = "Standard_LRS"
@@ -21,7 +21,7 @@ module "centos7-vm2" {
   source = "github.com/metall773/e-terraform-modules.git//modules/centos7-vm"
     app_name                         = var.app_name
     environment                      = var.environment
-    network-subnet                   = azurerm_subnet.network-subnet.id
+    network-subnet                   = module.network.network-subnet.id
     web-linux-vm-prefix              = "mouse"
     firewall_tcp_ports               = [22, 80, 443]
     firewall_udp_ports               = [53, 1002, 2005]
