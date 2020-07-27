@@ -1,5 +1,5 @@
 module "centos7-vm" {
-  source = "./modules/centos7-vm"
+  source = "github.com/metall773/e-terraform-modules.git//modules/centos7-vm"
     app_name                         = var.app_name
     environment                      = var.environment
     network-subnet                   = azurerm_subnet.network-subnet.id
@@ -18,7 +18,7 @@ module "centos7-vm" {
 }
 
 module "centos7-vm2" {
-  source = "./modules/centos7-vm"
+  source = "github.com/metall773/e-terraform-modules.git//modules/centos7-vm"
     app_name                         = var.app_name
     environment                      = var.environment
     network-subnet                   = azurerm_subnet.network-subnet.id

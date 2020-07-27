@@ -1,5 +1,5 @@
 module "mysql_db1" {
-  source = "./modules/mysql"
+  source = "github.com/metall773/e-terraform-modules.git//modules/mysql"
     app_name                         = var.app_name
     environment                      = var.environment
     vm_resource_group                = module.centos7-vm2.vm_resource_group.name
@@ -10,7 +10,7 @@ module "mysql_db1" {
 }
 
 module "postgresql_db1" {
-  source = "./modules/postgresql"
+  source = "github.com/metall773/e-terraform-modules.git//modules/postgresql"
     app_name                         = var.app_name
     environment                      = var.environment
     vm_resource_group                = module.centos7-vm.vm_resource_group.name

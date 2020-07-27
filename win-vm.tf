@@ -1,5 +1,5 @@
 module "bastion" {
-  source = "./modules/bastion"
+  source = "github.com/metall773/e-terraform-modules.git//modules/bastion"
     app_name                         = var.app_name
     environment                      = var.environment
     network-vnet                     = azurerm_virtual_network.network-vnet.name
@@ -10,7 +10,7 @@ module "bastion" {
 }
 
 module "win1-vm" {
-  source = "./modules/win-vm"
+  source = "github.com/metall773/e-terraform-modules.git//modules/win-vm"
     app_name                         = var.app_name
     environment                      = var.environment
     network-subnet                   = azurerm_subnet.network-subnet.id
