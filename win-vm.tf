@@ -26,7 +26,7 @@ module "win1-vm" {
     firewall_tcp_ports               = [3389, 80, 443, 8433]
     firewall_udp_ports               = [3389]
     enable_automatic_updates         = true
-    shared_disk_name                 = azurerm_storage_share.fileshare4all.name
-    shared_disk_storage_account      = azurerm_storage_account.storageaccount4all
+    shared_disk_name                 = module.shared-storage.fileshare4all.name
+    shared_disk_storage_account      = module.shared-storage.storageaccount4all
     choco_list                       = "7zip putty notepadplusplus git googlechrome ublockorigin-chrome chocolateygui"
 }

@@ -14,6 +14,15 @@ module "network" {
   source = "github.com/metall773/e-terraform-modules.git//modules/network"
     app_name       = var.app_name
     environment    = var.environment
-    location = var.location
+    location       = var.location
+    resource_group = azurerm_resource_group.terraformgroup
+}
+
+#create shared storage
+module "shared-storage" {
+  source = "github.com/metall773/e-terraform-modules.git//modules/shared-storage"
+    app_name       = var.app_name
+    environment    = var.environment
+    location       = var.location
     resource_group = azurerm_resource_group.terraformgroup
 }
