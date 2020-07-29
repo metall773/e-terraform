@@ -15,6 +15,7 @@ module "centos7-vm" {
     firewall_tcp_ports               = [22, 80, 443, 8433]
     shared_disk_name                 = module.shared-storage.fileshare4all.name
     shared_disk_storage_account      = module.shared-storage.storageaccount4all
+    packages_4_install               = "mc"
 }
 
 module "centos7-vm2" {
@@ -31,4 +32,5 @@ module "centos7-vm2" {
     #enable_extenalIP                 = false
     shared_disk_name                 = module.shared-storage.fileshare4all.name
     shared_disk_storage_account      = module.shared-storage.storageaccount4all
+    packages_4_install               = "mc java-11-openjdk"
 }
