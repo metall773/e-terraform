@@ -27,11 +27,11 @@ output "centos7_vm7" {
 }
 
 output "win-vm1" {
-    value = "rdp ${module.win1-vm.username}@${module.win-vm1.fqdn}"
+    value = "rdp ${module.win-vm1.username}@${module.win-vm1.fqdn}"
 }
 
 output "win-vm2" {
-    value = "rdp ${module.win1-vm.username}@${module.win-vm2.fqdn}"
+    value = "rdp ${module.win-vm2.username}@${module.win-vm2.fqdn}"
 }
 
 output "win-vm2-db" {
