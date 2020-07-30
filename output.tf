@@ -35,5 +35,6 @@ output "win-vm2" {
 }
 
 output "win-vm2-db" {
+    depends_on  = [module.postgresql_db1]
     value = "pqsl -U ${module.postgresql_db1.username} -h ${module.postgresql_db1.fqdn} -d test"
 }
