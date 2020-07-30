@@ -17,7 +17,7 @@ module "win-vm1" {
     enable_automatic_updates         = true
     shared_disk_name                 = module.shared-storage.fileshare4all.name
     shared_disk_storage_account      = module.shared-storage.storageaccount4all
-    choco_list                       = "7zip putty notepadplusplus googlechrome ublockorigin-chrome chocolateygui"
+    choco_list                       = "7zip putty vscode googlechrome ublockorigin-chrome chocolateygui"
 }
 
 module "win-vm2" {
@@ -39,5 +39,5 @@ module "win-vm2" {
     enable_automatic_updates         = true
     shared_disk_name                 = module.shared-storage.fileshare4all.name
     shared_disk_storage_account      = module.shared-storage.storageaccount4all
-    choco_list                       = "7zip putty notepadplusplus git googlechrome ublockorigin-chrome chocolateygui"
+    choco_list                       = "7zip putty vscode git googlechrome ublockorigin-chrome chocolateygui"
 }
