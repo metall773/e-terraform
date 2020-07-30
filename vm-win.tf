@@ -7,7 +7,7 @@ module "win-vm1" {
     win-admin-username               = "lee"
     storage_account_type             = "Standard_LRS"
     managed_disk_size_gb             = [150]
-    win-vm-prefix                    = "term"
+    win-vm-prefix                    = "w-term"
     location                         = "north europe"
     azurerm_storage_account_tier     = "Standard"
     azurerm_account_replication_type = "LRS"
@@ -29,7 +29,7 @@ module "win-vm2" {
     win-admin-username               = "lee"
     storage_account_type             = "Standard_LRS"
     managed_disk_size_gb             = [150]
-    win-vm-prefix                    = "1c"
+    win-vm-prefix                    = "w-1c"
     location                         = "north europe"
     azurerm_storage_account_tier     = "Standard"
     azurerm_account_replication_type = "LRS"
