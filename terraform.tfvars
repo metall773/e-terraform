@@ -1,7 +1,7 @@
 #envirment variables
 company     = "e-tiketka"
 app_name    = "e-tiketka-app"
-environment = "az-dev"
+environment = "az-d"
 location    = "north europe"
 
 #vm network variables
