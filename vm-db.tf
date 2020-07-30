@@ -1,4 +1,4 @@
-
+/*
 module "postgresql_db1" {
   source = "github.com/metall773/e-terraform-modules.git//modules/postgresql"
     app_name                         = var.app_name
@@ -10,3 +10,4 @@ module "postgresql_db1" {
     db-size                          = "B_Gen5_2"
     db-version                       = "11"
 }
+*/
