@@ -34,7 +34,9 @@ output "win-vm2" {
     value = "rdp ${module.win-vm2.username}@${module.win-vm2.fqdn}"
 }
 
+/*
 output "win-vm2-db" {
     depends_on  = [module.postgresql_db1]
     value = "pqsl -U ${module.postgresql_db1.username} -h ${module.postgresql_db1.fqdn} -d test"
 }
+*/
