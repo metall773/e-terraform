@@ -1,4 +1,3 @@
-/*
 module "postgresql_db1" {
   source = "github.com/metall773/e-terraform-modules.git//modules/postgresql"
     app_name                         = var.app_name
@@ -7,7 +6,6 @@ module "postgresql_db1" {
     db-prefix                        = module.win-vm2.vm_resource_group.name
     public_network_access_enabled    = true
     public_ip_address                = module.win-vm2.public_ip_address
-    db-size                          = "B_Gen5_2"
-    db-version                       = "11"
+    db-size                          = "GP_Gen5_4"
+    db-version                       = "10"
 }
-*/
