@@ -169,7 +169,7 @@ module "centos7-vm9" {
     shared_disk_storage_account      = module.shared-storage.storageaccount4all
 }
 
-module "centos7-vm3" {
+module "centos7-vm10" {
   source = "github.com/metall773/e-terraform-modules.git//modules/centos7-vm"
     app_name                         = var.app_name
     environment                      = var.environment
@@ -188,7 +188,7 @@ module "centos7-vm3" {
     shared_disk_storage_account      = module.shared-storage.storageaccount4all
 }
 
-module "centos7-vm3" {
+module "centos7-vm11" {
   source = "github.com/metall773/e-terraform-modules.git//modules/centos7-vm"
     app_name                         = var.app_name
     environment                      = var.environment
