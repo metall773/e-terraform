@@ -26,6 +26,22 @@ output "centos7_vm7" {
     value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm7.fqdn}"
 }
 
+output "centos7_vm8" {
+    value = "ssh ${module.centos7-vm5.username}@${module.centos7-vm5.fqdn}"
+}
+
+output "centos7_vm9" {
+    value = "ssh ${module.centos7-vm6.username}@${module.centos7-vm6.fqdn}"
+}
+
+output "centos7_vm10" {
+    value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm7.fqdn}"
+}
+
+output "centos7_vm11" {
+    value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm7.fqdn}"
+}
+
 output "win-vm1" {
     value = "rdp ${module.win-vm1.username}@${module.win-vm1.fqdn}"
 }
