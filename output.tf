@@ -27,19 +27,19 @@ output "centos7_vm7" {
 }
 
 output "centos7_vm8" {
-    value = "ssh ${module.centos7-vm5.username}@${module.centos7-vm5.fqdn}"
+    value = "ssh ${module.centos7-vm5.username}@${module.centos7-vm8.fqdn}"
 }
 
 output "centos7_vm9" {
-    value = "ssh ${module.centos7-vm6.username}@${module.centos7-vm6.fqdn}"
+    value = "ssh ${module.centos7-vm6.username}@${module.centos7-vm9.fqdn}"
 }
 
 output "centos7_vm10" {
-    value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm7.fqdn}"
+    value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm10.fqdn}"
 }
 
 output "centos7_vm11" {
-    value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm7.fqdn}"
+    value = "ssh ${module.centos7-vm7.username}@${module.centos7-vm11.fqdn}"
 }
 
 output "win-vm1" {
