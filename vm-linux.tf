@@ -8,6 +8,8 @@ module "centos7-vm1" {
     storage_account_type             = "Standard_LRS"
     managed_disk_size_gb             = "40"
     web-linux-vm-prefix              = "crm"
+    install_bitrix                   = "no"
+    install_bitrix_crm               = "yes"
     location                         = "north europe"
     azurerm_storage_account_tier     = "Standard"
     azurerm_account_replication_type = "LRS"
